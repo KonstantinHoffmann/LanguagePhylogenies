@@ -2,18 +2,18 @@
 author: Simon J. Greenhill, Konstantin Hoffmann
 level: Beginner
 title: Language Phylogenies
-subtitle: Using babel to analyze linguistic data
-beastversion: 2.5.1
+subtitle: Using babel to analyse linguistic data
+beastversion: 2.5.2
 tracerversion: 1.7.1
 ---
 
-# Language Phylogenies: Using babel to analyze linguistic data
+# Language Phylogenies: Using babel to analyse linguistic data
 
 
 
 # Background
 
-Bayesian phylogenies are widely used in comparative linguistics. The data set can contain grammatical features such as "has productive plural marking on nouns" or statistics of what cognates exist. The languages are then encoded as a binary string representing the presence or absence of these features. This forms the "sequence alignment matrix" on which the phylogeny is built.
+Bayesian phylogenies are widely used in comparative linguistics. They provide not only information about the relationship of different languages, but also test hypotheses concerning the ages of language families {% cite Bouckaert2012 --file LanguagePhylogenies/master_refs.bib  %}. The data set can contain grammatical features such as "has productive plural marking on nouns" or statistics of what cognates exist. The languages are then encoded as a binary string representing the presence or absence of these features. This forms the "sequence alignment matrix" on which the phylogeny is built.
 
 ----
 
@@ -21,7 +21,7 @@ Bayesian phylogenies are widely used in comparative linguistics. The data set ca
 
 ### BEAST2 - Bayesian Evolutionary Analysis Sampling Trees 2
 
-BEAST2 ([http://www.beast2.org](http://www.beast2.org)) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v2.5.1
+BEAST2 ([http://www.beast2.org](http://www.beast2.org)) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v2.5.2
 
 
 ### BEAUti2 - Bayesian Evolutionary Analysis Utility
@@ -44,10 +44,10 @@ IcyTree ([https://icytree.org](https://icytree.org)) is a browser-based phylogen
 
 # Practical: Creating a language phylogeny
 
-In this tutorial we will analyze a minor selection of Central Pacific languages and focus on the steps that are required in a linguistic analysis. 
+In this tutorial we will analyse a minor selection of Central Pacific languages and focus on the steps that are required in a linguistic analysis. 
 
 ## Installing necessary packages
-First we need to install the `babel` (v 0.2.0 or above) package for linguistic analyses. Further we will use a Birth-Death model which requires the package `BDSKY` (v. 1.4.2 or above). The latter one can be easily done via the package manager of BEAUti. For `babel` we first need to add extra repositories to the package manager.
+First we need to install the `babel` (v. 0.2.1 or above) package for linguistic analyses. Further we will use a Birth-Death model which requires the package `BDSKY` (v. 1.4.5 or above). The latter one can be easily done via the package manager of BEAUti. For `babel` we first need to add extra repositories to the package manager.
 > Open BEAUti.  Go to `File` and `Manage Packages`, click on `Package repositories`. In the new opened window click on `Add URL`, set the URL to **https://raw.githubusercontent.com/CompEvol/CBAN/master/packages-extra.xml**, click `Ok` and close the repository manager via `Done`. Finally select `babel` from the list and press `Install/Upgrade`. Also install `BDSKY` and optionally (if you want to use a sampled ancestor model) `SA` and **restart BEAUti**.
 
 
@@ -60,7 +60,7 @@ First we need to install the `babel` (v 0.2.0 or above) package for linguistic a
 
 ## The data set
 
-Before we start we need to make sure that our data is suitable for an analysis with `babel`. We assume that the alignments consist of **0, 1** and **?** representing the presence, absence or uncertainty of a feature (i.e. cognate or grammatical feature). Babel also assumes that your data has **ascertainment correction** columns. Researchers tend not to collect data that does not vary. This is a form of sampling bias that is often called ascertainment bias. In order to account for that **every first column of every partition of the alignment has to be an ascertainment column**. There all languages have the entry **0** except the ones, where the data is missing, they have a **?**.
+Before we start we need to make sure that our data is suitable for an analysis with `babel`. We assume that the alignments consist of **0, 1** and **?** representing the presence, absence or uncertainty of a feature (i.e. cognate or grammatical feature). Babel also assumes that your data has **ascertainment correction** columns. Researchers tend not to collect data that does not vary. This is a form of sampling bias that is often called ascertainment bias {% cite Chang2015 --file LanguagePhylogenies/master_refs.bib  %}. In order to account for that **every first column of every partition of the alignment has to be an ascertainment column**. There all languages have the entry **0** except the ones, where the data is missing, they have a **?**.
 
 The data used in this tutorial is an alignment matrix, where each entry represents the presence or absence of a certain cognate in this specific language. If you open the file `cpacific.nex` in a text editor, you can see that there is the alignment matrix and below a text block indicating, which columns belong the which meaning class. Every first entry of each meaning class is an ascertainment column.
 
@@ -82,7 +82,7 @@ The data used in this tutorial is an alignment matrix, where each entry represen
 
 ### Loading the template
 
-A template in BEAUti sets the interface and allows us to select and modify all the interesting parameters. Depending on the model varying combinations of parameters are necessary. Because BEAUti can not account for all possible models, there are so called templates that preset the interface accordingly.  
+A template in BEAUti sets the interface and allows us to select and modify all the interesting parameters. Depending on the model varying combinations of parameters are necessary. Because BEAUti can not account for all possible models, there are so called templates that preset the interface accordingly.
 
 `babel` comes with some BEAUti-templates that are made specifically for linguistic analyses. These ones are named after the substitution model used in the template. In this tutorial we go with the broadly used Binary Covarion model.
 
@@ -92,14 +92,13 @@ A template in BEAUti sets the interface and allows us to select and modify all t
 
 Next we will import our data set. 
 
-> Go to  `File > Add Alignment`, select the file`cpacific.nex`  and click on `Ok`.
+> Go to  `File > Add Alignment`, select the file `cpacific.nex`  and click on `Ok`.
 
 You should be able to see your alignment on the screen. There is one partition for every meaning class and they are presorted by the number of sites. We assume that words that have less cognates present also evolve at a slower rate than words that have many varieties. To achieve this we want to have different site models depending on the size of each meaning class. One for size 1-5, another one for size 6-10 and a third one for size 11-15. All partitions that fall in the same group should have linked site models.
 
 > After loading the data select the first partition `orgdata.bird` , hold **Shift**, scroll down and click on `orgdata.year` and press `Link Site Models`. Do the same from `orgdata.and` to `orgdata.wormearthworm` and from `orgdata.belly` to `orgdata.tothrow`.
 
 <figure>
-	<a id="fig:packages"></a>
 	<img style="width:100%;" src="figures/LoadedAlignment.png" alt="">
 	<figcaption>The alignment loaded and partitions grouped in bins of size 5</figcaption>
 </figure>
@@ -117,7 +116,6 @@ For now we stick with the default values of **alpha=0.5, s=0.5** and all the fre
 Note that one should make multiple analyses with differing substitution models and check, which one performs best.
 
 <figure>
-	<a id="fig:packages"></a>
 	<img style="width:100%;" src="figures/SiteModel.png" alt="">
 	<figcaption>The site model tab</figcaption>
 </figure>
@@ -140,19 +138,18 @@ Note that there are two contemporary BDSKY-models `Birth Death Skyline Contempor
 
 It comes with three parameters, the **birth rate** $\lambda$, the **death rate $\mu$** and the **sampling proportion $\rho$**. In terms of language evolution a birth event happens, if there is a diversification of two languages and a death event is a language going extinct. The sampling proportion is the relative amount of languages in our analysis compared to the total amount of languages existing in the clade.
 
-We need to have a strict prior for at least one of these parameters in order to robustly estimate the others. It makes sense to chose the sampling proportion as we know of almost every language spoken in the world.  Glottolog lists 45 Central Pacific languages and we have 20 of them in our data set, so we would expect a sampling proportion of ca. 44%. A good candidate for rho is the Beta distribution: It allows values between 0 and 1 and has most of its weight centered around its mean $\frac{a}{a+b}$ , where we chose for $a$ the amount of sampled languages and for $b$ the amount of unsampled languages. 
+We need to have a strict prior for at least one of these parameters in order to robustly estimate the others. It makes sense to chose the sampling proportion as we know of almost every language spoken in the world. Glottolog {% cite Glottolog --file LanguagePhylogenies/master_refs.bib  %} lists 45 Central Pacific languages and we have 20 of them in our data set, so we would expect a sampling proportion of ca. 44%. A good candidate for rho is the Beta distribution: It allows values between 0 and 1 and has most of its weight centered around its mean $\frac{a}{a+b}$ , where we chose for $a$ the amount of sampled languages and for $b$ the amount of unsampled languages. 
 
 <figure>
-	<a id="fig:packages"></a>
 	<img style="width:100%;" src="figures/BetaPrior.png" alt="">
 	<figcaption>The Beta distribution is great to specify the sampling proportion</figcaption>
 </figure>
 
 The skyline model allows the rates to change over time, which is governed by their dimension. If we would like to have only one overall rate, we need to set the dimension of the birth rate and death rate to 1. For now we stick with constant rates, but later we might want to check if a proper Skyline model with multiple rates performs better.
 
-We don't know how quickly languages die out or emerge, but we know for sure that it doesn't happen every day. A death rate of 0.01 means for example that a language is about 100 years around before it goes extinct. Some language last much longer, some others shorter. A good prior candidate for that would be the exponential distribution. It favors low values close to zero, but also allows higher values if it is necessary. 
+We don't know how quickly languages die out or emerge, but we know for sure that it doesn't happen every day. A death rate of 0.01 means for example that a language is about 100 years around before it goes extinct. Some language last much longer, some others shorter. A good prior candidate for that would be the exponential distribution. It favors low values close to zero, but also allows higher values if it is necessary. We also can set the initial values of these parameters much lower in order to decrease the burn-in time.
 
-> Click on the black triangle left of `rhoBDS.t:tree` and set `Alpha` to **20** and `Beta` to **25**. Then click on the button next to the birth rate prior, which says `initial = [2.0][0.0,Infinity]` and set `Dimension` to **1**. Make sure that the death rate prior also has dimension 1.
+> Click on the black triangle left of `rhoBDS.t:tree`. Make sure that a Beta-distribution is selected and set `Alpha` to **20** and `Beta` to **25**. Then click on the button next to the birth rate prior, which says `initial = [2.0][0.0,Infinity]`, set `Dimension` to **1**, if it is not already by default and the `Value` to **0.01**. Do the same for the death rate, but set this initial value to something slightly lower, e.g. **0.009**.
 >
 > Then click on the black triangle left of `birthRateBDS.t:tree` and select `Exponential` from the drop down menu. Set the `Mean` value to **0.01**. Repeat this step for `deathRateBDS.t:tree`.
 
@@ -182,28 +179,27 @@ The average of these estimates is about 1000 years ago, and they are spread on b
 > **Hawaiian, Mangareva, Maori, Marquesan, RapanuiEasterIsland, Rarotongan, SouthIslandMaori, Tahitian, Tuamotu**. After that click `Ok` and check again the box `monophyletic`. As prior distribution select `Normal` and enter the `Mean` of **1000** and `Sigma` of **100**.
 
 <figure>
-	<a id="fig:packages"></a>
 	<img style="width:100%;" src="figures/MRCAPriors.png" alt="">
 	<figcaption>The calibration priors</figcaption>
 </figure>
 
-Finally we want to make sure that all priors are proper. There are uniform priors without upper bound for the clock rate and the slow mutation rate from the Binary Covarion model. Make sure to give those an upper bound, 100 should be generous enough. The analysis will run if you skip this step and might yield useful results, but if we want to compare different analyses and estimate their marginal likelihood it is essential to only have proper priors.
+Finally we want to make sure that all priors are proper. There are uniform priors without upper bound for the clock rate and the slow mutation rate from the Binary Covarion model. One should choose a value that is large enough that the traces don't get close to it. 100 should be generous enough for both parameters. However the analysis will run if you skip this step and might yield useful results, but if we want to compare different analyses and estimate their marginal likelihood it is essential to only have proper priors.
 
 > Expand the prior of `clockRate.c:clock` and set `Upper` to **100** . Do the same for `bcov_alpha.s:bird`.
 
 ### The MCMC tab
 
-Here we can specify the length of the run as well as the filenames of the output tree files and the log files. Finally we want to save our settings and generate a BEAST2-xml file. It is highly recommended to generate another xml-file with the check box `Sample From Prior` ticked. It is used to verify if the data has enough signal to estimate the parameters or if the posterior results are mainly dominated by the prior choice.
+Here we can specify the length of the run as well as the filenames of the output tree files and the log files. For the purpose of this tutorial, we choose a short chain length of 1 million. Usually the chain length should be large enough to yield a high ESS for every parameter (see next section). Finally we want to save our settings and generate a BEAST2-xml file. It is highly recommended to generate another xml-file with the check box `Sample From Prior` ticked. It is used to verify if the data has enough signal to estimate the parameters or if the posterior results are mainly dominated by the prior choice.
 
-> Select `File > Save As` and enter a filename (e.g. **cpacific.xml**) and click `Ok`. Tick the check box next to `Sample from Prior` , change the file names of the trace log files and tree log files (e.g. **cpacific_prior.log** and **cpacific_prior.trees**) and save again with a different filename (e.g. **cpacific_prior.xml**).
+> Click on the `MCMC`-tab. Set the chain length to **1000000** and set the filenames of the log files (tracelog and treelog, screenlog can be left empty) by expanding their respective menu. Select `File > Save As` and enter a filename (e.g. **cpacific.xml**) and click `Ok`. Tick the check box next to `Sample from Prior`, change the file names of the trace log files and tree log files (e.g. **cpacific_prior.log** and **cpacific_prior.trees**) and save again with a different filename (e.g. **cpacific_prior.xml**).
 
 
 
 ## Running the analysis
 
-Now we are ready to do run the file. Open BEAST 2 and select your generated xml-file as input. The computation should take a while, you can watch it progressing or download the finished output-files.
+Now we are ready to do run the file. Open BEAST 2 and select your generated xml-file as input. The computation should take a while (ca. 30 min. on a modern computer), you can watch it progressing or download the finished output-files.
 
->Open BEAST 2, select `cpacific.xml` as input-file and click `Open`.
+>Open BEAST 2, select `cpacific.xml` as input-file and click `Open`. Repeat this for the sample-from-prior analysis.
 
 ## Processing the results
 
@@ -213,17 +209,24 @@ BEAST 2 now creates multiple files. The Log-file contains all the information ab
 
 Tracer provides us some summary statistics of the posterior sample. After loading the log-file we see in the top left corner the filename, the amount of states and the burn-in (which is 10% by default). Below there are all the parameters listed together with their mean values and their effective sample size (ESS). This value should -- as a rule of thumb -- be above 200 for each parameter. 
 
-The MCMC-algorithm needs some time for the Markov chain to converge to its stationary state. Click on a parameter and then on `Trace` in the right window. If you can see big jumps, then this is a strong hint that the chain has not converged yet. The first fraction of the run, where the algorithm has not converged yet is called **burn-in** and is discarded. We can adjust the burn-in by clicking on it and typing a new value that covers all the big jumps that we can see.
+The MCMC-algorithm needs some time for the Markov chain to converge to its stationary state. Click on a parameter and then on `Trace` in the right window. If you can see big jumps, then this is a strong hint that the chain has not converged yet. The first fraction of the run, where the algorithm has not converged yet is called **burn-in** and is discarded. We can adjust the burn-in by clicking on it and typing a new value that covers all observable big jumps.
+
+<figure>
+	<img style="width:100%;" src="figures/trace2.png" alt="">
+	<figcaption>Trace of the posterior. Here a burn-in of 500000 would be appropiate</figcaption>
+</figure>
 
 > Open Tracer, click on the `+` in the top left corner to import trace files. Select `cpacific.log `and `cpacific_prior.log` and press `Ok`.
+
+Note that in this example file, most of the ESSes are below 200 as we the chain length of the MCMC to a rather low value.
 
 ### Checking out interesting parameters
 
 What are the inferred parameters? How quickly do these languages evolve? There are a lot of values to check, we will go through it. Make sure to compare all results to the ones from the sample-from-prior-run to ensure their validity. Note that the MCMC-algorithm is a stochastic process, so your results might vary a bit from the ones presented here.
 
-**Posterior, prior** and **likelihood**: The posterior -- the product of prior and likelihood -- is the value that the MCMC-algorithm optimizes. Further we have the treelikelihoods for every word. We can not do anything with these values, but we should check for low ESS values (marked in yellow or red). 
+**Posterior, prior** and **likelihood**: The posterior -- the product of prior and likelihood -- is the value that the MCMC-algorithm optimizes. Further we have the treelikelihoods for every word. Ideally all of those have an ESS of above 200.
 
-More interesting is the **tree height**. Archaeologists suggest that the first settlement of Fiji happend ca. 3200 years ago. Our estimate has a mean of roughly 3900 years, which seems to be quite far off, but 3200 is still in its 95% HPD interval.  
+More interesting is the **tree height**. Archaeologists suggest that the first settlement of Fiji happend ca. 3200 years ago. Our estimate has a mean of roughly 3900 years, which seems to be quite far off, but 3200 is still in its 95% HPD interval.
 
 The **mutation rates** of the different word categories are quite striking. We can clearly see slow (bird), medium (and) and fast (belly) mutation rates. You can select all three at once to see them together.
 
@@ -232,7 +235,6 @@ Below are the parameters of the Binary Covarion model followed by the ones of th
 Last but not least the **MRCA times** of East Polynesia and New Zealand: New Zealand matches its prior -- again the prior was chosen to be very strict and we are sure about this knowledge -- while the time of the East Polynesian clade is a bit older than the prior. Remember that there were two different reports about its clade age. This analysis well supports the "long" chronology.
 
 <figure>
-	<a id="fig:packages"></a>
 	<img style="width:100%;" src="figures/tracefile1.png" alt="">
 	<figcaption>Posterior clade age of East Polynesia compared to its prior belief</figcaption>
 </figure>
@@ -253,14 +255,13 @@ This shows us all the trees from our posterior sample. The arrows in the bottom 
 
 Treeannotator creates a summary tree out of all the trees from the posterior sample excluding the burn in.
 
-> Open Treeannotator. Set the `Burnin percentage` to at least **10** percent and specify your input (`cpacific.trees`) and output file (e.g. `cpacific_annotated.trees`). Click on `Run` to start the process.
+> Open Treeannotator. Set the `Burnin percentage` to **50** percent and specify your input (`cpacific.trees`) and output file (e.g. `cpacific_annotated.trees`). Click on `Run` to start the process.
 
 Then again, IcyTree can be used to show the MCC tree. 
 
 > Open again icytree.org and load your annotated tree file. Press `a` to display the time axis. Go to `Style > Internal node text > posterior`  and then to `Style > Node height error bars > height_95%_HPD`. You should now be able to see the posterior probabilities of all the nodes together with their height HPD intervals.
 
 <figure>
-	<a id="fig:packages"></a>
 	<img style="width:100%;" src="figures/tree_annotated.png" alt="">
 	<figcaption>The MCC summary tree in IcyTree</figcaption>
 </figure>
@@ -270,6 +271,8 @@ Interestingly most of the diversification events happened in the past 1500 years
 # Further steps
 
 This tutorial is over, but the analysis should not stop here. There are a lot of things to try out and compare: A relaxed clock, other priors on birth and death rate to see how dependent the result are on the priors, varying rates over time, different substitution models and a lot more. 
+
+## Nested Sampling
 
 Nested sampling is a great way to compare different models. It gives a marginal likelihood estimate together with a standard deviation. Those can be used to test the support of a model. More about this and a guide on how to set it up in BEAST2 can be found on its github-page https://github.com/BEAST2-Dev/nested-sampling. 
 

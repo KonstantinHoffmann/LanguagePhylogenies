@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='BinaryCovarion' beautistatus='' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" required="BEAST v2.5.0:BEASTLabs v1.8.0:BDSKY v1.4.1" version="2.5">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='BinaryCovarion' beautistatus='' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood" required="BEAST v2.5.2:BEASTLabs v1.8.1:BDSKY v1.4.5" version="2.5">
 
 
     <data id="cpacific" dataType="standard">
@@ -1405,7 +1405,7 @@
 <map name="OneOnX" >beast.math.distributions.OneOnX</map>
 
 
-<run id="mcmc" spec="MCMC" chainLength="10000000">
+<run id="mcmc" spec="MCMC" chainLength="1000000">
     <state id="state" storeEvery="5000">
         <tree id="Tree.t:tree" name="stateNode">
             <taxonset id="TaxonSet.bird" spec="TaxonSet">
@@ -1414,15 +1414,15 @@
                 </alignment>
             </taxonset>
         </tree>
+        <parameter id="mutationRate.s:bird muc" name="stateNode">1.0</parameter>
+        <parameter id="bcov_alpha.s:bird muc" lower="1.0E-4" name="stateNode" upper="1.0">0.5</parameter>
+        <parameter id="bcov_s.s:bird muc" lower="1.0E-4" name="stateNode" upper="Infinity">0.5</parameter>
+        <parameter id="frequencies.s:bird muc" dimension="2" lower="0.0" name="stateNode" upper="1.0">0.5 0.5</parameter>
         <parameter id="mutationRate.s:belly" name="stateNode">1.0</parameter>
-        <parameter id="mutationRate.s:bird" name="stateNode">1.0</parameter>
-        <parameter id="bcov_alpha.s:bird" lower="1.0E-4" name="stateNode" upper="1.0">0.5</parameter>
-        <parameter id="bcov_s.s:bird" lower="1.0E-4" name="stateNode" upper="Infinity">0.5</parameter>
-        <parameter id="frequencies.s:bird" dimension="2" lower="0.0" name="stateNode" upper="1.0">0.5 0.5</parameter>
         <parameter id="mutationRate.s:and" name="stateNode">1.0</parameter>
-        <parameter id="birthRateBDS.t:tree" lower="0.0" name="stateNode" upper="Infinity">2.0</parameter>
-        <parameter id="deathRate.t:tree" lower="0.0" name="stateNode" upper="Infinity">0.5</parameter>
-        <parameter id="rho.t:tree" lower="0.0" name="stateNode" upper="1.0">0.8</parameter>
+        <parameter id="birthRateBDS.t:tree" lower="0.0" name="stateNode" upper="Infinity">0.01</parameter>
+        <parameter id="deathRateBDS.t:tree" lower="0.0" name="stateNode" upper="Infinity">0.009</parameter>
+        <parameter id="rhoBDS.t:tree" lower="0.0" name="stateNode" upper="1.0">0.44</parameter>
         <parameter id="clockRate.c:clock" name="stateNode">1.0</parameter>
     </state>
 
@@ -1430,48 +1430,48 @@
 
     <distribution id="posterior" spec="util.CompoundDistribution">
         <distribution id="prior" spec="util.CompoundDistribution">
-            <distribution id="BirthDeathSkyContemporaryBDSParam.t:tree" spec="beast.evolution.speciation.BirthDeathSkylineModel" birthRate="@birthRateBDS.t:tree" conditionOnRoot="true" deathRate="@deathRate.t:tree" rho="@rho.t:tree" tree="@Tree.t:tree">
-                <parameter id="samplingRate.t:tree" name="samplingRate">0.0</parameter>
+            <distribution id="BirthDeathSkyContemporaryBDSParam.t:tree" spec="beast.evolution.speciation.BirthDeathSkylineModel" birthRate="@birthRateBDS.t:tree" conditionOnRoot="true" contemp="true" deathRate="@deathRateBDS.t:tree" rho="@rhoBDS.t:tree" tree="@Tree.t:tree">
+                <parameter id="samplingRateBDS.t:tree" name="samplingRate">0.0</parameter>
             </distribution>
-            <prior id="bcov_alpha_prior.s:bird" name="distribution" x="@bcov_alpha.s:bird">
-                <Uniform id="Uniform.1" name="distr" upper="Infinity"/>
+            <prior id="bcov_alpha_prior.s:bird muc" name="distribution" x="@bcov_alpha.s:bird muc">
+                <Uniform id="Uniform.1" name="distr" upper="100.0"/>
             </prior>
-            <prior id="bcov_s_prior.s:bird" name="distribution" x="@bcov_s.s:bird">
+            <prior id="bcov_s_prior.s:bird muc" name="distribution" x="@bcov_s.s:bird muc">
                 <Gamma id="Gamma.0" name="distr">
                     <parameter id="RealParameter.0" lower="0.0" name="alpha" upper="0.0">0.05</parameter>
                     <parameter id="RealParameter.1" lower="0.0" name="beta" upper="0.0">10.0</parameter>
                 </Gamma>
             </prior>
-            <prior id="birthRatePriorContemp.t:tree" name="distribution" x="@birthRateBDS.t:tree">
+            <prior id="birthRatePriorContempBDS.t:tree" name="distribution" x="@birthRateBDS.t:tree">
                 <Exponential id="Exponential.202" name="distr">
                     <parameter id="RealParameter.608" estimate="false" name="mean">0.01</parameter>
                 </Exponential>
             </prior>
             <prior id="ClockPrior.c:clock" name="distribution" x="@clockRate.c:clock">
-                <Uniform id="Uniform.0" name="distr" upper="Infinity"/>
+                <Uniform id="Uniform.0" name="distr" upper="100.0"/>
             </prior>
-            <prior id="deathRatePriorContemp.t:tree" name="distribution" x="@deathRate.t:tree">
+            <prior id="deathRatePriorContempBDS.t:tree" name="distribution" x="@deathRateBDS.t:tree">
                 <Exponential id="Exponential.203" name="distr">
                     <parameter id="RealParameter.609" estimate="false" name="mean">0.01</parameter>
                 </Exponential>
             </prior>
-            <prior id="rhoPriorContemp.t:tree" name="distribution" x="@rho.t:tree">
+            <prior id="rhoPriorContempBDS.t:tree" name="distribution" x="@rhoBDS.t:tree">
                 <Beta id="Beta.0" name="distr">
                     <parameter id="RealParameter.606" estimate="false" name="alpha">20.0</parameter>
                     <parameter id="RealParameter.607" estimate="false" name="beta">25.0</parameter>
                 </Beta>
             </prior>
-            <distribution id="EastPolynesia.prior" spec="beast.math.distributions.MRCAPrior" monophyletic="true" tree="@Tree.t:tree">
-                <taxonset id="EastPolynesia" spec="TaxonSet">
+            <distribution id="EastPolynesian.prior" spec="beast.math.distributions.MRCAPrior" monophyletic="true" tree="@Tree.t:tree">
+                <taxonset id="EastPolynesian" spec="TaxonSet">
                     <taxon id="Hawaiian" spec="Taxon"/>
                     <taxon id="Mangareva" spec="Taxon"/>
                     <taxon id="Maori" spec="Taxon"/>
                     <taxon id="Marquesan" spec="Taxon"/>
                     <taxon id="RapanuiEasterIsland" spec="Taxon"/>
+                    <taxon id="Rarotongan" spec="Taxon"/>
                     <taxon id="SouthIslandMaori" spec="Taxon"/>
                     <taxon id="Tahitian" spec="Taxon"/>
                     <taxon id="Tuamotu" spec="Taxon"/>
-                    <taxon id="Rarotongan" spec="Taxon"/>
                 </taxonset>
                 <Normal id="Normal.0" name="distr">
                     <parameter id="RealParameter.612" estimate="false" name="mean">1000.0</parameter>
@@ -1494,473 +1494,473 @@
                 <data id="orgdata.bird" spec="FilteredAlignment" ascertained="true" data="@bird" excludeto="1" filter="-">
                     <userDataType id="TwoStateCovarion.0" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
-                <siteModel id="SiteModel.s:bird" spec="SiteModel" gammaCategoryCount="1" mutationRate="@mutationRate.s:bird">
-                    <parameter id="gammaShape.s:bird" estimate="false" name="shape">1.0</parameter>
-                    <parameter id="proportionInvariant.s:bird" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
-                    <substModel id="covarion" spec="BinaryCovarion" alpha="@bcov_alpha.s:bird" switchRate="@bcov_s.s:bird" vfrequencies="@frequencies.s:bird">
-                        <parameter id="hiddenfrequencies.s:bird" dimension="2" estimate="false" lower="0.0" name="hfrequencies" upper="1.0">0.5 0.5</parameter>
-                        <frequencies id="dummyfrequencies.s:bird" spec="Frequencies" data="@bird" estimate="false"/>
+                <siteModel id="SiteModel.s:bird muc" spec="SiteModel" gammaCategoryCount="1" mutationRate="@mutationRate.s:bird muc">
+                    <parameter id="gammaShape.s:bird muc" estimate="false" name="shape">1.0</parameter>
+                    <parameter id="proportionInvariant.s:bird muc" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                    <substModel id="covarion" spec="BinaryCovarion" alpha="@bcov_alpha.s:bird muc" switchRate="@bcov_s.s:bird muc" vfrequencies="@frequencies.s:bird muc">
+                        <parameter id="hiddenfrequencies.s:bird muc" dimension="2" estimate="false" lower="0.0" name="hfrequencies" upper="1.0">0.5 0.5</parameter>
+                        <frequencies id="dummyfrequencies.s:bird muc" spec="Frequencies" data="@bird" estimate="false"/>
                     </substModel>
                 </siteModel>
                 <branchRateModel id="StrictClock.c:clock" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate.c:clock"/>
             </distribution>
-            <distribution id="treeLikelihood.eight" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.eight" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.eight" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="eight" spec="FilteredAlignment" data="@cpacific" filter="189-190"/>
                     <userDataType id="TwoStateCovarion.1" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.leaf" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.leaf" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.leaf" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="leaf" spec="FilteredAlignment" data="@cpacific" filter="370-371"/>
                     <userDataType id="TwoStateCovarion.2" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.seven" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.seven" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.seven" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="seven" spec="FilteredAlignment" data="@cpacific" filter="596-597"/>
                     <userDataType id="TwoStateCovarion.3" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.sky" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.sky" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.sky" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="sky" spec="FilteredAlignment" data="@cpacific" filter="635-636"/>
                     <userDataType id="TwoStateCovarion.4" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.three" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.three" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.three" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="three" spec="FilteredAlignment" data="@cpacific" filter="737-738"/>
                     <userDataType id="TwoStateCovarion.5" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.at" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.at" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.at" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="at" spec="FilteredAlignment" data="@cpacific" filter="16-18"/>
                     <userDataType id="TwoStateCovarion.6" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.below" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.below" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.below" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="below" spec="FilteredAlignment" data="@cpacific" filter="42-44"/>
                     <userDataType id="TwoStateCovarion.7" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.blood" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.blood" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.blood" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="blood" spec="FilteredAlignment" data="@cpacific" filter="64-66"/>
                     <userDataType id="TwoStateCovarion.8" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.bone" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.bone" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.bone" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="bone" spec="FilteredAlignment" data="@cpacific" filter="67-69"/>
                     <userDataType id="TwoStateCovarion.9" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.fire" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.fire" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.fire" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="fire" spec="FilteredAlignment" data="@cpacific" filter="225-227"/>
                     <userDataType id="TwoStateCovarion.10" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.five" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.five" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.five" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="five" spec="FilteredAlignment" data="@cpacific" filter="233-235"/>
                     <userDataType id="TwoStateCovarion.11" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.four" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.four" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.four" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="four" spec="FilteredAlignment" data="@cpacific" filter="255-257"/>
                     <userDataType id="TwoStateCovarion.12" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.he_she" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.he_she" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.he_she" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="he_she" spec="FilteredAlignment" data="@cpacific" filter="305-307"/>
                     <userDataType id="TwoStateCovarion.13" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.house" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.house" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.house" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="house" spec="FilteredAlignment" data="@cpacific" filter="321-323"/>
                     <userDataType id="TwoStateCovarion.14" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.liver" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.liver" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.liver" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="liver" spec="FilteredAlignment" data="@cpacific" filter="392-394"/>
                     <userDataType id="TwoStateCovarion.15" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.new" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.new" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.new" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="new" spec="FilteredAlignment" data="@cpacific" filter="480-482"/>
                     <userDataType id="TwoStateCovarion.16" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.night" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.night" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.night" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="night" spec="FilteredAlignment" data="@cpacific" filter="483-485"/>
                     <userDataType id="TwoStateCovarion.17" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.nine" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.nine" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.nine" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="nine" spec="FilteredAlignment" data="@cpacific" filter="486-488"/>
                     <userDataType id="TwoStateCovarion.18" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.rain" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.rain" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.rain" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="rain" spec="FilteredAlignment" data="@cpacific" filter="533-535"/>
                     <userDataType id="TwoStateCovarion.19" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.root" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.root" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.root" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="root" spec="FilteredAlignment" data="@cpacific" filter="566-568"/>
                     <userDataType id="TwoStateCovarion.20" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.six" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.six" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.six" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="six" spec="FilteredAlignment" data="@cpacific" filter="629-631"/>
                     <userDataType id="TwoStateCovarion.21" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.skin" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.skin" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.skin" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="skin" spec="FilteredAlignment" data="@cpacific" filter="632-634"/>
                     <userDataType id="TwoStateCovarion.22" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.star" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.star" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.star" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="star" spec="FilteredAlignment" data="@cpacific" filter="667-669"/>
                     <userDataType id="TwoStateCovarion.23" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.stick_wood" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.stick_wood" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.stick_wood" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="stick_wood" spec="FilteredAlignment" data="@cpacific" filter="670-672"/>
                     <userDataType id="TwoStateCovarion.24" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.ten" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.ten" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.ten" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="ten" spec="FilteredAlignment" data="@cpacific" filter="688-690"/>
                     <userDataType id="TwoStateCovarion.25" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.toeat" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.toeat" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.toeat" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="toeat" spec="FilteredAlignment" data="@cpacific" filter="870-872"/>
                     <userDataType id="TwoStateCovarion.26" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.tohear" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.tohear" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.tohear" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="tohear" spec="FilteredAlignment" data="@cpacific" filter="908-910"/>
                     <userDataType id="TwoStateCovarion.27" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.tolaugh" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.tolaugh" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.tolaugh" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="tolaugh" spec="FilteredAlignment" data="@cpacific" filter="977-979"/>
                     <userDataType id="TwoStateCovarion.28" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.tongue" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.tongue" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.tongue" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="tongue" spec="FilteredAlignment" data="@cpacific" filter="995-997"/>
                     <userDataType id="TwoStateCovarion.29" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.tostand" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.tostand" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.tostand" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="tostand" spec="FilteredAlignment" data="@cpacific" filter="1129-1131"/>
                     <userDataType id="TwoStateCovarion.30" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.two" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.two" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.two" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="two" spec="FilteredAlignment" data="@cpacific" filter="1228-1230"/>
                     <userDataType id="TwoStateCovarion.31" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.where" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.where" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.where" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="where" spec="FilteredAlignment" data="@cpacific" filter="1260-1262"/>
                     <userDataType id="TwoStateCovarion.32" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.who" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.who" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.who" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="who" spec="FilteredAlignment" data="@cpacific" filter="1275-1277"/>
                     <userDataType id="TwoStateCovarion.33" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.ash" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.ash" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.ash" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="ash" spec="FilteredAlignment" data="@cpacific" filter="12-15"/>
                     <userDataType id="TwoStateCovarion.34" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.back" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.back" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.back" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="back" spec="FilteredAlignment" data="@cpacific" filter="19-22"/>
                     <userDataType id="TwoStateCovarion.35" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.ear" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.ear" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.ear" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="ear" spec="FilteredAlignment" data="@cpacific" filter="172-175"/>
                     <userDataType id="TwoStateCovarion.36" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.fruit" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.fruit" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.fruit" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="fruit" spec="FilteredAlignment" data="@cpacific" filter="258-261"/>
                     <userDataType id="TwoStateCovarion.37" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.long" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.long" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.long" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="long" spec="FilteredAlignment" data="@cpacific" filter="395-398"/>
                     <userDataType id="TwoStateCovarion.38" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.louse" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.louse" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.louse" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="louse" spec="FilteredAlignment" data="@cpacific" filter="399-402"/>
                     <userDataType id="TwoStateCovarion.39" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.name" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.name" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.name" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="name" spec="FilteredAlignment" data="@cpacific" filter="440-443"/>
                     <userDataType id="TwoStateCovarion.40" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.nose" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.nose" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.nose" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="nose" spec="FilteredAlignment" data="@cpacific" filter="499-502"/>
                     <userDataType id="TwoStateCovarion.41" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.sea" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.sea" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.sea" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="sea" spec="FilteredAlignment" data="@cpacific" filter="592-595"/>
                     <userDataType id="TwoStateCovarion.42" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.smoke" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.smoke" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.smoke" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="smoke" spec="FilteredAlignment" data="@cpacific" filter="650-653"/>
                     <userDataType id="TwoStateCovarion.43" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.thou" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.thou" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.thou" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="thou" spec="FilteredAlignment" data="@cpacific" filter="733-736"/>
                     <userDataType id="TwoStateCovarion.44" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.todrink" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.todrink" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.todrink" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="todrink" spec="FilteredAlignment" data="@cpacific" filter="866-869"/>
                     <userDataType id="TwoStateCovarion.45" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.togrow" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.togrow" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.togrow" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="togrow" spec="FilteredAlignment" data="@cpacific" filter="904-907"/>
                     <userDataType id="TwoStateCovarion.46" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.tooth" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.tooth" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.tooth" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="tooth" spec="FilteredAlignment" data="@cpacific" filter="1009-1012"/>
                     <userDataType id="TwoStateCovarion.47" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.tosleep" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.tosleep" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.tosleep" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="tosleep" spec="FilteredAlignment" data="@cpacific" filter="1072-1075"/>
                     <userDataType id="TwoStateCovarion.48" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.toswim" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.toswim" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.toswim" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="toswim" spec="FilteredAlignment" data="@cpacific" filter="1162-1165"/>
                     <userDataType id="TwoStateCovarion.49" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.toyawn" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.toyawn" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.toyawn" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="toyawn" spec="FilteredAlignment" data="@cpacific" filter="1224-1227"/>
                     <userDataType id="TwoStateCovarion.50" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.water" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.water" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.water" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="water" spec="FilteredAlignment" data="@cpacific" filter="1237-1240"/>
                     <userDataType id="TwoStateCovarion.51" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.what" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.what" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.what" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="what" spec="FilteredAlignment" data="@cpacific" filter="1250-1253"/>
                     <userDataType id="TwoStateCovarion.52" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.above" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.above" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.above" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="above" spec="FilteredAlignment" data="@cpacific" filter="1-5"/>
                     <userDataType id="TwoStateCovarion.53" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.earth_soil" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.earth_soil" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.earth_soil" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="earth_soil" spec="FilteredAlignment" data="@cpacific" filter="176-180"/>
                     <userDataType id="TwoStateCovarion.54" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.eye" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.eye" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.eye" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="eye" spec="FilteredAlignment" data="@cpacific" filter="191-195"/>
                     <userDataType id="TwoStateCovarion.55" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.father" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.father" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.father" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="father" spec="FilteredAlignment" data="@cpacific" filter="214-218"/>
                     <userDataType id="TwoStateCovarion.56" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.fish" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.fish" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.fish" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="fish" spec="FilteredAlignment" data="@cpacific" filter="228-232"/>
                     <userDataType id="TwoStateCovarion.57" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.grass" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.grass" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.grass" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="grass" spec="FilteredAlignment" data="@cpacific" filter="272-276"/>
                     <userDataType id="TwoStateCovarion.58" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.hand" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.hand" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.hand" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="hand" spec="FilteredAlignment" data="@cpacific" filter="300-304"/>
                     <userDataType id="TwoStateCovarion.59" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.i" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.i" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.i" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="i" spec="FilteredAlignment" data="@cpacific" filter="338-342"/>
                     <userDataType id="TwoStateCovarion.60" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.ininside" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.ininside" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.ininside" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="ininside" spec="FilteredAlignment" data="@cpacific" filter="352-356"/>
                     <userDataType id="TwoStateCovarion.61" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.lake" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.lake" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.lake" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="lake" spec="FilteredAlignment" data="@cpacific" filter="365-369"/>
                     <userDataType id="TwoStateCovarion.62" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.lightning" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.lightning" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.lightning" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="lightning" spec="FilteredAlignment" data="@cpacific" filter="387-391"/>
                     <userDataType id="TwoStateCovarion.63" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.meat_flesh" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.meat_flesh" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.meat_flesh" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="meat_flesh" spec="FilteredAlignment" data="@cpacific" filter="410-414"/>
                     <userDataType id="TwoStateCovarion.64" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.mosquito" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.mosquito" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.mosquito" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="mosquito" spec="FilteredAlignment" data="@cpacific" filter="421-425"/>
                     <userDataType id="TwoStateCovarion.65" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.neck" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.neck" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.neck" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="neck" spec="FilteredAlignment" data="@cpacific" filter="469-473"/>
                     <userDataType id="TwoStateCovarion.66" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.rope" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.rope" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.rope" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="rope" spec="FilteredAlignment" data="@cpacific" filter="569-573"/>
                     <userDataType id="TwoStateCovarion.67" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.snake" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.snake" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.snake" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="snake" spec="FilteredAlignment" data="@cpacific" filter="654-658"/>
                     <userDataType id="TwoStateCovarion.68" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.thick" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.thick" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.thick" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="thick" spec="FilteredAlignment" data="@cpacific" filter="714-718"/>
                     <userDataType id="TwoStateCovarion.69" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.tocook" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.tocook" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.tocook" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="tocook" spec="FilteredAlignment" data="@cpacific" filter="817-821"/>
                     <userDataType id="TwoStateCovarion.70" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.tocry" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.tocry" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.tocry" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="tocry" spec="FilteredAlignment" data="@cpacific" filter="831-835"/>
                     <userDataType id="TwoStateCovarion.71" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.todiebedead" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.todiebedead" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.todiebedead" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="todiebedead" spec="FilteredAlignment" data="@cpacific" filter="849-853"/>
                     <userDataType id="TwoStateCovarion.72" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.todig" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.todig" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.todig" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="todig" spec="FilteredAlignment" data="@cpacific" filter="854-858"/>
                     <userDataType id="TwoStateCovarion.73" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.topoundbeat" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.topoundbeat" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.topoundbeat" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="topoundbeat" spec="FilteredAlignment" data="@cpacific" filter="1019-1023"/>
                     <userDataType id="TwoStateCovarion.74" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.tosit" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.tosit" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.tosit" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="tosit" spec="FilteredAlignment" data="@cpacific" filter="1067-1071"/>
                     <userDataType id="TwoStateCovarion.75" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.wind" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.wind" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.wind" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="wind" spec="FilteredAlignment" data="@cpacific" filter="1300-1304"/>
                     <userDataType id="TwoStateCovarion.76" spec="beast.evolution.datatype.TwoStateCovarion"/>
                 </data>
             </distribution>
-            <distribution id="treeLikelihood.year" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird" tree="@Tree.t:tree" useAmbiguities="true">
+            <distribution id="treeLikelihood.year" spec="TreeLikelihood" branchRateModel="@StrictClock.c:clock" siteModel="@SiteModel.s:bird muc" tree="@Tree.t:tree" useAmbiguities="true">
                 <data id="orgdata.year" spec="FilteredAlignment" ascertained="true" excludeto="1" filter="-">
                     <data id="year" spec="FilteredAlignment" data="@cpacific" filter="1335-1339"/>
                     <userDataType id="TwoStateCovarion.77" spec="beast.evolution.datatype.TwoStateCovarion"/>
@@ -2721,44 +2721,44 @@
         </distribution>
     </distribution>
 
-    <operator id="bcovAlphaScaler.s:bird" spec="ScaleOperator" parameter="@bcov_alpha.s:bird" scaleFactor="0.75" weight="0.1"/>
+    <operator id="bcovAlphaScaler.s:bird muc" spec="ScaleOperator" parameter="@bcov_alpha.s:bird muc" scaleFactor="0.75" weight="0.1"/>
 
-    <operator id="bcovSwitchParamScaler.s:bird" spec="ScaleOperator" parameter="@bcov_s.s:bird" scaleFactor="0.75" weight="0.1"/>
+    <operator id="bcovSwitchParamScaler.s:bird muc" spec="ScaleOperator" parameter="@bcov_s.s:bird muc" scaleFactor="0.75" weight="0.1"/>
 
-    <operator id="frequenciesDelta.s:bird" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
-        <parameter idref="frequencies.s:bird"/>
+    <operator id="frequenciesDelta.s:bird muc" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">
+        <parameter idref="frequencies.s:bird muc"/>
     </operator>
 
     <operator id="FixMeanMutationRatesOperator" spec="DeltaExchangeOperator" delta="0.75" weight="2.0">
-        <parameter idref="mutationRate.s:bird"/>
+        <parameter idref="mutationRate.s:bird muc"/>
         <parameter idref="mutationRate.s:and"/>
         <parameter idref="mutationRate.s:belly"/>
         <weightvector id="weightparameter" spec="parameter.IntegerParameter" dimension="3" estimate="false" lower="0" upper="0">219 660 278</weightvector>
     </operator>
 
-    <operator id="BDSKY_contemptreeScaler.t:tree" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:tree" weight="3.0"/>
+    <operator id="BDSKY_contemp_bds_treeScaler.t:tree" spec="ScaleOperator" scaleFactor="0.5" tree="@Tree.t:tree" weight="3.0"/>
 
-    <operator id="BDSKY_contemptreeRootScaler.t:tree" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:tree" weight="3.0"/>
+    <operator id="BDSKY_contemp_bds_treeRootScaler.t:tree" spec="ScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:tree" weight="3.0"/>
 
-    <operator id="BDSKY_contempUniformOperator.t:tree" spec="Uniform" tree="@Tree.t:tree" weight="30.0"/>
+    <operator id="BDSKY_contemp_bds_UniformOperator.t:tree" spec="Uniform" tree="@Tree.t:tree" weight="30.0"/>
 
-    <operator id="BDSKY_contempSubtreeSlide.t:tree" spec="SubtreeSlide" tree="@Tree.t:tree" weight="15.0"/>
+    <operator id="BDSKY_contemp_bds_SubtreeSlide.t:tree" spec="SubtreeSlide" tree="@Tree.t:tree" weight="15.0"/>
 
-    <operator id="BDSKY_contempnarrow.t:tree" spec="Exchange" tree="@Tree.t:tree" weight="15.0"/>
+    <operator id="BDSKY_contemp_bds_narrow.t:tree" spec="Exchange" tree="@Tree.t:tree" weight="15.0"/>
 
-    <operator id="BDSKY_contempwide.t:tree" spec="Exchange" isNarrow="false" tree="@Tree.t:tree" weight="3.0"/>
+    <operator id="BDSKY_contemp_bds_wide.t:tree" spec="Exchange" isNarrow="false" tree="@Tree.t:tree" weight="3.0"/>
 
-    <operator id="BDSKY_contempWilsonBalding.t:tree" spec="WilsonBalding" tree="@Tree.t:tree" weight="3.0"/>
+    <operator id="BDSKY_contemp_bds_WilsonBalding.t:tree" spec="WilsonBalding" tree="@Tree.t:tree" weight="3.0"/>
 
-    <operator id="deathRateScaler.t:tree" spec="ScaleOperator" parameter="@deathRate.t:tree" scaleFactor="0.75" weight="2.0"/>
+    <operator id="BDSKY_contemp_bds_deathRateScaler.t:tree" spec="ScaleOperator" parameter="@deathRateBDS.t:tree" scaleFactor="0.75" weight="2.0"/>
 
-    <operator id="rhoScaler.t:tree" spec="ScaleOperator" parameter="@rho.t:tree" scaleFactor="0.75" weight="1.0"/>
+    <operator id="BDSKY_contemp_bds_rhoScaler.t:tree" spec="ScaleOperator" parameter="@rhoBDS.t:tree" scaleFactor="0.75" weight="1.0"/>
 
-    <operator id="birthRateScaler.t:tree" spec="ScaleOperator" parameter="@birthRateBDS.t:tree" scaleFactor="0.75" weight="10.0"/>
+    <operator id="BDSKY_contemp_bds_birthRateScaler.t:tree" spec="ScaleOperator" parameter="@birthRateBDS.t:tree" scaleFactor="0.75" weight="10.0"/>
 
-    <operator id="updownBD.t:tree" spec="UpDownOperator" scaleFactor="0.75" weight="2.0">
+    <operator id="BDSKY_contemp_bds_updownBD.t:tree" spec="UpDownOperator" scaleFactor="0.75" weight="2.0">
         <up idref="birthRateBDS.t:tree"/>
-        <down idref="deathRate.t:tree"/>
+        <down idref="deathRateBDS.t:tree"/>
     </operator>
 
     <operator id="StrictClockRateScaler.c:clock" spec="ScaleOperator" parameter="@clockRate.c:clock" scaleFactor="0.75" weight="3.0"/>
@@ -2768,226 +2768,226 @@
         <down idref="Tree.t:tree"/>
     </operator>
 
-    <logger id="tracelog" fileName="cpaficic.log" logEvery="1000" model="@posterior" sort="smart">
+    <logger id="tracelog" fileName="cpacific.log" logEvery="1000" model="@posterior" sort="smart">
         <log idref="posterior"/>
         <log idref="likelihood"/>
         <log idref="prior"/>
-        <log idref="treeLikelihood.spider"/>
-        <log id="TreeHeight.t:tree" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:tree"/>
-        <log idref="treeLikelihood.they"/>
-        <log idref="treeLikelihood.lake"/>
-        <log idref="treeLikelihood.belly"/>
-        <log idref="mutationRate.s:belly"/>
-        <log idref="treeLikelihood.rat"/>
-        <log idref="treeLikelihood.ininside"/>
-        <log idref="treeLikelihood.egg"/>
-        <log idref="treeLikelihood.child"/>
-        <log idref="treeLikelihood.this"/>
-        <log idref="treeLikelihood.todrink"/>
-        <log idref="treeLikelihood.todig"/>
-        <log idref="treeLikelihood.black"/>
-        <log idref="treeLikelihood.thatch_roof"/>
-        <log idref="treeLikelihood.toclimb"/>
-        <log idref="treeLikelihood.tothrow"/>
-        <log idref="treeLikelihood.tochew"/>
-        <log idref="treeLikelihood.wet"/>
-        <log idref="treeLikelihood.fish"/>
-        <log idref="treeLikelihood.hair"/>
-        <log idref="treeLikelihood.what"/>
-        <log idref="treeLikelihood.near"/>
-        <log idref="treeLikelihood.fire"/>
-        <log idref="treeLikelihood.dog"/>
-        <log idref="treeLikelihood.red"/>
-        <log idref="treeLikelihood.tostand"/>
-        <log idref="treeLikelihood.woman_female"/>
-        <log idref="treeLikelihood.towork"/>
-        <log idref="treeLikelihood.liver"/>
-        <log idref="treeLikelihood.star"/>
-        <log idref="treeLikelihood.salt"/>
-        <log idref="treeLikelihood.if"/>
-        <log idref="treeLikelihood.tofear"/>
-        <log idref="treeLikelihood.tosew"/>
-        <log idref="treeLikelihood.nine"/>
-        <log idref="treeLikelihood.thick"/>
-        <log idref="treeLikelihood.tofall"/>
-        <log idref="treeLikelihood.sky"/>
-        <log idref="treeLikelihood.man_male"/>
-        <log idref="treeLikelihood.skin"/>
-        <log idref="treeLikelihood.tothink"/>
-        <log idref="treeLikelihood.root"/>
-        <log idref="treeLikelihood.tohear"/>
-        <log idref="treeLikelihood.at"/>
-        <log idref="treeLikelihood.tolaugh"/>
-        <log idref="treeLikelihood.earth_soil"/>
-        <log idref="treeLikelihood.husband"/>
-        <log idref="treeLikelihood.tooth"/>
-        <log idref="treeLikelihood.painfulsick"/>
-        <log idref="treeLikelihood.dry"/>
-        <log idref="treeLikelihood.tosuck"/>
-        <log idref="treeLikelihood.woods_forest"/>
-        <log idref="treeLikelihood.intestines"/>
-        <log idref="treeLikelihood.tocome"/>
-        <log idref="treeLikelihood.meat_flesh"/>
-        <log idref="treeLikelihood.tosee"/>
-        <log idref="treeLikelihood.nonot"/>
-        <log idref="treeLikelihood.where"/>
-        <log idref="treeLikelihood.good"/>
-        <log idref="treeLikelihood.tosteal"/>
-        <log idref="treeLikelihood.tochoose"/>
-        <log idref="treeLikelihood.togrow"/>
-        <log idref="treeLikelihood.moon"/>
-        <log idref="treeLikelihood.rain"/>
-        <log idref="treeLikelihood.wing"/>
-        <log idref="treeLikelihood.you"/>
-        <log idref="treeLikelihood.eight"/>
         <log idref="treeLikelihood.bird"/>
-        <log idref="mutationRate.s:bird"/>
-        <log idref="bcov_alpha.s:bird"/>
-        <log idref="bcov_s.s:bird"/>
-        <log idref="frequencies.s:bird"/>
-        <log idref="treeLikelihood.todiebedead"/>
-        <log idref="treeLikelihood.toeat"/>
-        <log idref="treeLikelihood.left"/>
-        <log idref="treeLikelihood.hand"/>
-        <log idref="treeLikelihood.tail"/>
-        <log idref="treeLikelihood.tostabpierce"/>
-        <log idref="treeLikelihood.bone"/>
-        <log idref="treeLikelihood.two"/>
-        <log idref="treeLikelihood.toblow"/>
-        <log idref="treeLikelihood.toscratch"/>
-        <log idref="treeLikelihood.lightning"/>
-        <log idref="treeLikelihood.mosquito"/>
-        <log idref="treeLikelihood.shyashamed"/>
-        <log idref="treeLikelihood.tosqueeze"/>
-        <log idref="treeLikelihood.toflow"/>
-        <log idref="treeLikelihood.tohit"/>
-        <log idref="treeLikelihood.small"/>
+        <log id="TreeHeight.t:tree" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:tree"/>
+        <parameter idref="mutationRate.s:bird muc" name="log"/>
+        <parameter idref="bcov_alpha.s:bird muc" name="log"/>
+        <parameter idref="bcov_s.s:bird muc" name="log"/>
+        <parameter idref="frequencies.s:bird muc" name="log"/>
+        <log idref="treeLikelihood.good"/>
+        <log idref="treeLikelihood.sharp"/>
         <log idref="treeLikelihood.ear"/>
-        <log idref="treeLikelihood.nose"/>
-        <log idref="treeLikelihood.smoke"/>
-        <log idref="treeLikelihood.flower"/>
-        <log idref="treeLikelihood.and"/>
-        <log idref="mutationRate.s:and"/>
-        <log idref="treeLikelihood.thou"/>
-        <log idref="treeLikelihood.rotten"/>
-        <log idref="treeLikelihood.tosplit"/>
-        <log idref="treeLikelihood.green"/>
-        <log idref="treeLikelihood.rope"/>
-        <log idref="treeLikelihood.day"/>
-        <log idref="treeLikelihood.white"/>
-        <log idref="treeLikelihood.tosit"/>
-        <log idref="treeLikelihood.tosleep"/>
-        <log idref="treeLikelihood.louse"/>
-        <log idref="treeLikelihood.four"/>
-        <log idref="treeLikelihood.short"/>
-        <log idref="treeLikelihood.new"/>
-        <log idref="treeLikelihood.tongue"/>
-        <log idref="treeLikelihood.far"/>
-        <log idref="treeLikelihood.when"/>
+        <log idref="treeLikelihood.thick"/>
+        <log idref="treeLikelihood.blood"/>
+        <log idref="treeLikelihood.they"/>
+        <log idref="treeLikelihood.tohide"/>
+        <log idref="treeLikelihood.small"/>
+        <log idref="treeLikelihood.head"/>
+        <log idref="treeLikelihood.toclimb"/>
+        <log idref="treeLikelihood.water"/>
+        <log idref="treeLikelihood.mouth"/>
+        <log idref="treeLikelihood.toeat"/>
+        <log idref="treeLikelihood.sea"/>
+        <log idref="treeLikelihood.dullblunt"/>
+        <log idref="treeLikelihood.toburn"/>
+        <log idref="treeLikelihood.tofear"/>
+        <log idref="treeLikelihood.child"/>
+        <log idref="treeLikelihood.tothink"/>
+        <log idref="treeLikelihood.woman_female"/>
+        <log idref="treeLikelihood.tocount"/>
+        <log idref="treeLikelihood.three"/>
+        <log idref="treeLikelihood.dog"/>
+        <log idref="treeLikelihood.sky"/>
+        <log idref="treeLikelihood.thatch_roof"/>
+        <log idref="treeLikelihood.he_she"/>
+        <log idref="treeLikelihood.toknowbeknowledgeable"/>
+        <log idref="treeLikelihood.tokill"/>
+        <log idref="treeLikelihood.tocry"/>
         <log idref="treeLikelihood.snake"/>
-        <log idref="treeLikelihood.ash"/>
-        <log idref="treeLikelihood.i"/>
-        <log idref="treeLikelihood.father"/>
-        <log idref="treeLikelihood.wide"/>
+        <log idref="treeLikelihood.warm"/>
+        <log idref="treeLikelihood.toscratch"/>
+        <log idref="treeLikelihood.dry"/>
+        <log idref="treeLikelihood.shyashamed"/>
+        <log idref="treeLikelihood.who"/>
+        <log idref="treeLikelihood.fog"/>
+        <log idref="treeLikelihood.tochew"/>
+        <log idref="treeLikelihood.ininside"/>
+        <log idref="treeLikelihood.tohunt"/>
+        <log idref="treeLikelihood.todig"/>
+        <log idref="treeLikelihood.moon"/>
+        <log idref="treeLikelihood.tofall"/>
+        <log idref="treeLikelihood.dust"/>
+        <log idref="treeLikelihood.tofly"/>
+        <log idref="treeLikelihood.grass"/>
+        <log idref="treeLikelihood.husband"/>
+        <log idref="treeLikelihood.todrink"/>
+        <log idref="treeLikelihood.heavy"/>
+        <log idref="treeLikelihood.rope"/>
+        <log idref="treeLikelihood.near"/>
+        <log idref="treeLikelihood.lake"/>
+        <log idref="treeLikelihood.nine"/>
+        <log idref="treeLikelihood.tosit"/>
+        <log idref="treeLikelihood.egg"/>
+        <log idref="treeLikelihood.toopenuncover"/>
+        <log idref="treeLikelihood.woods_forest"/>
+        <log idref="treeLikelihood.bone"/>
+        <log idref="treeLikelihood.if"/>
+        <log idref="treeLikelihood.tothrow"/>
+        <log idref="treeLikelihood.badevil"/>
+        <log idref="treeLikelihood.tobite"/>
+        <log idref="treeLikelihood.tohold"/>
+        <log idref="treeLikelihood.tosew"/>
         <log idref="treeLikelihood.below"/>
         <log idref="treeLikelihood.how"/>
-        <log idref="treeLikelihood.tofly"/>
-        <log idref="treeLikelihood.dirty"/>
-        <log idref="treeLikelihood.fog"/>
-        <log idref="treeLikelihood.that"/>
+        <log idref="treeLikelihood.tosay"/>
+        <log idref="treeLikelihood.red"/>
+        <log idref="treeLikelihood.tail"/>
+        <log idref="treeLikelihood.rain"/>
+        <log idref="treeLikelihood.long"/>
+        <log idref="treeLikelihood.wind"/>
+        <log idref="treeLikelihood.liver"/>
+        <log idref="treeLikelihood.right"/>
+        <log idref="treeLikelihood.belly"/>
+        <log idref="mutationRate.s:belly"/>
+        <log idref="treeLikelihood.meat_flesh"/>
+        <log idref="treeLikelihood.hand"/>
+        <log idref="treeLikelihood.eye"/>
+        <log idref="treeLikelihood.neck"/>
+        <log idref="treeLikelihood.tohit"/>
+        <log idref="treeLikelihood.tohear"/>
+        <log idref="treeLikelihood.towalk"/>
+        <log idref="treeLikelihood.five"/>
+        <log idref="treeLikelihood.mother"/>
+        <log idref="treeLikelihood.six"/>
+        <log idref="treeLikelihood.you"/>
+        <log idref="treeLikelihood.skin"/>
+        <log idref="treeLikelihood.cold"/>
+        <log idref="treeLikelihood.where"/>
+        <log idref="treeLikelihood.tongue"/>
+        <log idref="treeLikelihood.tosplit"/>
+        <log idref="treeLikelihood.toyawn"/>
+        <log idref="treeLikelihood.hair"/>
+        <log idref="treeLikelihood.what"/>
+        <log idref="treeLikelihood.tochoose"/>
+        <log idref="treeLikelihood.i"/>
+        <log idref="treeLikelihood.branch"/>
+        <log idref="treeLikelihood.far"/>
+        <log idref="treeLikelihood.new"/>
+        <log idref="treeLikelihood.eight"/>
+        <log idref="treeLikelihood.tosqueeze"/>
+        <log idref="treeLikelihood.father"/>
+        <log idref="treeLikelihood.breast"/>
+        <log idref="treeLikelihood.big"/>
+        <log idref="treeLikelihood.ash"/>
+        <log idref="treeLikelihood.shoulder"/>
+        <log idref="treeLikelihood.totieupfasten"/>
+        <log idref="treeLikelihood.above"/>
+        <log idref="treeLikelihood.wormearthworm"/>
+        <log idref="treeLikelihood.road_path"/>
+        <log idref="treeLikelihood.louse"/>
+        <log idref="treeLikelihood.tosuck"/>
+        <log idref="treeLikelihood.two"/>
+        <log idref="treeLikelihood.feather"/>
+        <log idref="treeLikelihood.wide"/>
+        <log idref="treeLikelihood.one"/>
+        <log idref="treeLikelihood.green"/>
+        <log idref="treeLikelihood.when"/>
+        <log idref="treeLikelihood.year"/>
+        <log idref="treeLikelihood.toswell"/>
+        <log idref="treeLikelihood.tosniffsmell"/>
+        <log idref="treeLikelihood.root"/>
+        <log idref="treeLikelihood.house"/>
+        <log idref="treeLikelihood.thou"/>
+        <log idref="treeLikelihood.thin"/>
+        <log idref="treeLikelihood.thunder"/>
+        <log idref="treeLikelihood.toplant"/>
+        <log idref="treeLikelihood.narrow"/>
+        <log idref="treeLikelihood.sand"/>
+        <log idref="treeLikelihood.lightning"/>
+        <log idref="treeLikelihood.seven"/>
+        <log idref="treeLikelihood.earth_soil"/>
+        <log idref="treeLikelihood.stone"/>
+        <log idref="treeLikelihood.spider"/>
+        <log idref="treeLikelihood.correcttrue"/>
+        <log idref="treeLikelihood.tocome"/>
+        <log idref="treeLikelihood.tosteal"/>
+        <log idref="treeLikelihood.person_humanbeing"/>
+        <log idref="treeLikelihood.salt"/>
+        <log idref="treeLikelihood.back"/>
+        <log idref="treeLikelihood.wing"/>
+        <log idref="treeLikelihood.star"/>
+        <log idref="treeLikelihood.wife"/>
+        <log idref="treeLikelihood.four"/>
+        <log idref="treeLikelihood.nonot"/>
+        <log idref="treeLikelihood.and"/>
+        <log idref="mutationRate.s:and"/>
+        <log idref="treeLikelihood.todiebedead"/>
+        <log idref="treeLikelihood.fire"/>
+        <log idref="treeLikelihood.flower"/>
+        <log idref="treeLikelihood.leg_foot"/>
+        <log idref="treeLikelihood.fish"/>
+        <log idref="treeLikelihood.tovomit"/>
+        <log idref="treeLikelihood.tocuthack"/>
+        <log idref="treeLikelihood.rotten"/>
+        <log idref="treeLikelihood.tospit"/>
+        <log idref="treeLikelihood.nose"/>
+        <log idref="treeLikelihood.tolaugh"/>
+        <log idref="treeLikelihood.at"/>
+        <log idref="treeLikelihood.wet"/>
+        <log idref="treeLikelihood.fat_grease"/>
+        <log idref="treeLikelihood.left"/>
+        <log idref="treeLikelihood.stick_wood"/>
+        <log idref="treeLikelihood.rat"/>
+        <log idref="treeLikelihood.needle"/>
+        <log idref="treeLikelihood.cloud"/>
+        <log idref="treeLikelihood.short"/>
+        <log idref="treeLikelihood.mosquito"/>
+        <log idref="treeLikelihood.yellow"/>
+        <log idref="treeLikelihood.night"/>
+        <log idref="treeLikelihood.tostabpierce"/>
+        <log idref="treeLikelihood.day"/>
+        <log idref="treeLikelihood.toliedown"/>
+        <log idref="treeLikelihood.toblow"/>
+        <log idref="treeLikelihood.toshoot"/>
         <log idref="treeLikelihood.name"/>
         <log idref="treeLikelihood.todream"/>
-        <log idref="treeLikelihood.seven"/>
-        <log idref="treeLikelihood.three"/>
-        <log idref="treeLikelihood.tovomit"/>
-        <log idref="treeLikelihood.tobite"/>
-        <log idref="treeLikelihood.badevil"/>
-        <log idref="treeLikelihood.above"/>
-        <log idref="treeLikelihood.cloud"/>
-        <log idref="treeLikelihood.tocry"/>
-        <log idref="treeLikelihood.stone"/>
-        <log idref="treeLikelihood.toburn"/>
-        <log idref="treeLikelihood.tospit"/>
-        <log idref="treeLikelihood.five"/>
-        <log idref="treeLikelihood.tolivebealive"/>
-        <log idref="treeLikelihood.road_path"/>
-        <log idref="treeLikelihood.back"/>
-        <log idref="treeLikelihood.grass"/>
-        <log idref="treeLikelihood.topoundbeat"/>
-        <log idref="treeLikelihood.head"/>
-        <log idref="treeLikelihood.big"/>
-        <log idref="treeLikelihood.toshoot"/>
-        <log idref="treeLikelihood.heavy"/>
-        <log idref="treeLikelihood.narrow"/>
-        <log idref="treeLikelihood.stick_wood"/>
-        <log idref="treeLikelihood.warm"/>
-        <log idref="treeLikelihood.tosniffsmell"/>
-        <log idref="treeLikelihood.eye"/>
-        <log idref="treeLikelihood.leaf"/>
-        <log idref="treeLikelihood.blood"/>
-        <log idref="treeLikelihood.fat_grease"/>
-        <log idref="treeLikelihood.sharp"/>
-        <log idref="treeLikelihood.tobreathe"/>
-        <log idref="treeLikelihood.correcttrue"/>
-        <log idref="treeLikelihood.year"/>
-        <log idref="treeLikelihood.breast"/>
-        <log idref="treeLikelihood.toplant"/>
-        <log idref="treeLikelihood.tocount"/>
-        <log idref="treeLikelihood.feather"/>
-        <log idref="treeLikelihood.long"/>
-        <log idref="treeLikelihood.six"/>
-        <log idref="treeLikelihood.toswell"/>
-        <log idref="treeLikelihood.wormearthworm"/>
-        <log idref="treeLikelihood.leg_foot"/>
-        <log idref="treeLikelihood.night"/>
-        <log idref="treeLikelihood.toliedown"/>
-        <log idref="treeLikelihood.needle"/>
-        <log idref="treeLikelihood.tohunt"/>
-        <log idref="treeLikelihood.old"/>
-        <log idref="treeLikelihood.he_she"/>
-        <log idref="treeLikelihood.person_humanbeing"/>
-        <log idref="treeLikelihood.toyawn"/>
-        <log idref="treeLikelihood.yellow"/>
-        <log idref="treeLikelihood.tobuy"/>
-        <log idref="treeLikelihood.right"/>
-        <log idref="treeLikelihood.towalk"/>
-        <log idref="treeLikelihood.who"/>
-        <log idref="treeLikelihood.tocook"/>
-        <log idref="treeLikelihood.shoulder"/>
-        <log idref="treeLikelihood.dullblunt"/>
-        <log idref="treeLikelihood.tosay"/>
+        <log idref="treeLikelihood.man_male"/>
+        <log idref="treeLikelihood.toflow"/>
+        <log idref="treeLikelihood.tooth"/>
+        <log idref="treeLikelihood.dirty"/>
         <log idref="treeLikelihood.toswim"/>
-        <log idref="treeLikelihood.thin"/>
+        <log idref="treeLikelihood.painfulsick"/>
+        <log idref="treeLikelihood.tocook"/>
+        <log idref="treeLikelihood.tosee"/>
+        <log idref="treeLikelihood.topoundbeat"/>
         <log idref="treeLikelihood.fruit"/>
-        <log idref="treeLikelihood.totieupfasten"/>
+        <log idref="treeLikelihood.tolivebealive"/>
+        <log idref="treeLikelihood.tobuy"/>
+        <log idref="treeLikelihood.tosleep"/>
+        <log idref="treeLikelihood.this"/>
+        <log idref="treeLikelihood.tostand"/>
         <log idref="treeLikelihood.ten"/>
-        <log idref="treeLikelihood.toopenuncover"/>
-        <log idref="treeLikelihood.sea"/>
-        <log idref="treeLikelihood.tokill"/>
-        <log idref="treeLikelihood.toknowbeknowledgeable"/>
-        <log idref="treeLikelihood.wife"/>
-        <log idref="treeLikelihood.cold"/>
-        <log idref="treeLikelihood.tohide"/>
-        <log idref="treeLikelihood.tohold"/>
-        <log idref="treeLikelihood.wind"/>
-        <log idref="treeLikelihood.sand"/>
-        <log idref="treeLikelihood.water"/>
-        <log idref="treeLikelihood.branch"/>
-        <log idref="treeLikelihood.neck"/>
-        <log idref="treeLikelihood.mouth"/>
-        <log idref="treeLikelihood.house"/>
-        <log idref="treeLikelihood.thunder"/>
-        <log idref="treeLikelihood.dust"/>
-        <log idref="treeLikelihood.tocuthack"/>
-        <log idref="treeLikelihood.one"/>
-        <log idref="treeLikelihood.mother"/>
+        <log idref="treeLikelihood.that"/>
+        <log idref="treeLikelihood.intestines"/>
+        <log idref="treeLikelihood.leaf"/>
+        <log idref="treeLikelihood.old"/>
+        <log idref="treeLikelihood.smoke"/>
+        <log idref="treeLikelihood.tobreathe"/>
+        <log idref="treeLikelihood.black"/>
+        <log idref="treeLikelihood.togrow"/>
+        <log idref="treeLikelihood.towork"/>
+        <log idref="treeLikelihood.white"/>
         <log idref="BirthDeathSkyContemporaryBDSParam.t:tree"/>
         <log idref="birthRateBDS.t:tree"/>
-        <log idref="deathRate.t:tree"/>
-        <log idref="rho.t:tree"/>
+        <log idref="deathRateBDS.t:tree"/>
+        <log idref="rhoBDS.t:tree"/>
         <log idref="NewZealand.prior"/>
         <log idref="clockRate.c:clock"/>
-        <log idref="EastPolynesia.prior"/>
+        <log idref="EastPolynesian.prior"/>
     </logger>
 
     <logger id="screenlog" logEvery="1000">

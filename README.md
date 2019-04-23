@@ -17,7 +17,7 @@ Bayesian phylogenies are widely used in comparative linguistics. They provide no
 
 In this tutorial we will analyse a minor selection of Central Pacific languages and focus on the steps that are required in a linguistic analysis. These linguistic data come from 20 languages spoken in Polynesia in the Pacific including Hawaiian, Fijian, Tahitian, Tongan, Samoan, Rapanui (spoken on Easter Island) and Maori (spoken in New Zealand). This group of languages form the "Central Pacific” clade of the great Austronesian language family which originated in Taiwan around 5000 years ago, and spread though-out the Pacific from Madagascar to Easter Island ({% cite Gray2009 --file LanguagePhylogenies/master_refs.bib  %}). 
 
-This dataset contains binary data demarcating the presence or absence of ‘cognates’, which are homologous word forms inherited from the common ancestor of these languages (“Proto-Central Pacific”). The raw linguistic data are available on the Austronesian Basic Vocabulary Database website ([https://abvd.shh.mpg.de/austronesian/]https://abvd.shh.mpg.de/austronesian/), and more information about the relationships of these languages and the research behind this classification  can be found at Glottolog, with links to the primary research here: [https://glottolog.org/resource/languoid/id/cent2060]https://glottolog.org/resource/languoid/id/cent2060
+This dataset contains binary data demarcating the presence or absence of ‘cognates’, which are homologous word forms inherited from the common ancestor of these languages (“Proto-Central Pacific”). The raw linguistic data are available on the [Austronesian Basic Vocabulary Database website](https://abvd.shh.mpg.de/austronesian/), and more information about the relationships of these languages and the research behind this classification  can be found at Glottolog, with links to the primary research here: https://glottolog.org/resource/languoid/id/cent2060.
 
 ----
 
@@ -25,7 +25,7 @@ This dataset contains binary data demarcating the presence or absence of ‘cogn
 
 ### BEAST2 - Bayesian Evolutionary Analysis Sampling Trees 2
 
-BEAST2 ([http://www.beast2.org](http://www.beast2.org)) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v2.5.2
+BEAST2 (http://www.beast2.org) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v2.5.2
 
 
 ### BEAUti2 - Bayesian Evolutionary Analysis Utility
@@ -36,11 +36,11 @@ Both BEAST2 and BEAUti2 are Java programs, which means that the exact same code 
 
 ### Tracer
 
-Tracer ([http://beast.community/tracer](http://beast.community/tracer)) is used to summarise the posterior estimates of the various parameters sampled by the Markov Chain. This program can be used for visual inspection and to assess convergence. It helps to quickly view median estimates and 95% highest posterior density intervals of the parameters, and calculates the effective sample sizes (ESS) of parameters. It can also be used to investigate potential parameter correlations. We will be using Tracer v1.7.1.
+Tracer (http://beast.community/tracer) is used to summarise the posterior estimates of the various parameters sampled by the Markov Chain. This program can be used for visual inspection and to assess convergence. It helps to quickly view median estimates and 95% highest posterior density intervals of the parameters, and calculates the effective sample sizes (ESS) of parameters. It can also be used to investigate potential parameter correlations. We will be using Tracer v1.7.1.
 
 ### IcyTree
 
-IcyTree ([https://icytree.org](https://icytree.org)) is a browser-based phylogenetic tree viewer. It is intended for rapid visualisation of phylogenetic tree files. It can also render phylogenetic networks provided in extended Newick format. IcyTree is compatible with current versions of Mozilla Firefox and Google Chrome.
+IcyTree (https://icytree.org) is a browser-based phylogenetic tree viewer. It is intended for rapid visualisation of phylogenetic tree files. It can also render phylogenetic networks provided in extended Newick format. IcyTree is compatible with current versions of Mozilla Firefox and Google Chrome.
 
 
 
@@ -283,7 +283,7 @@ Nested sampling is a great way to compare different models. It gives a marginal 
 
 # Useful Links
 
-- BEAST 2 website and documentation: [http://www.beast2.org/](http://www.beast2.org/)
+- BEAST 2 website and documentation: https://www.beast2.org/
 - Babel package for linguistic analyses in BEAST2: https://github.com/rbouckaert/Babel
 - BDSKY package for BEAST2: https://github.com/BEAST2-Dev/bdsky
 - SA package for ancient languages: https://github.com/CompEvol/sampled-ancestors

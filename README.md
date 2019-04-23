@@ -15,6 +15,10 @@ tracerversion: 1.7.1
 
 Bayesian phylogenies are widely used in comparative linguistics. They provide not only information about the relationship of different languages, but also test hypotheses concerning the ages of language families {% cite Bouckaert2012 --file LanguagePhylogenies/master_refs.bib  %}. The data set can contain grammatical features such as "has productive plural marking on nouns" or statistics of what cognates exist. The languages are then encoded as a binary string representing the presence or absence of these features. This forms the "sequence alignment matrix" on which the phylogeny is built.
 
+In this tutorial we will analyse a minor selection of Central Pacific languages and focus on the steps that are required in a linguistic analysis. These linguistic data come from 20 languages spoken in Polynesia in the Pacific including Hawaiian, Fijian, Tahitian, Tongan, Samoan, Rapanui (spoken on Easter Island) and Maori (spoken in New Zealand). This group of languages form the "Central Pacific” clade of the great Austronesian language family which originated in Taiwan around 5000 years ago, and spread though-out the Pacific from Madagascar to Easter Island ({% cite Gray2009 --file LanguagePhylogenies/master_refs.bib  %}). 
+
+This dataset contains binary data demarcating the presence or absence of ‘cognates’, which are homologous word forms inherited from the common ancestor of these languages (“Proto-Central Pacific”). The raw linguistic data are available on the Austronesian Basic Vocabulary Database website ([https://abvd.shh.mpg.de/austronesian/]https://abvd.shh.mpg.de/austronesian/), and more information about the relationships of these languages and the research behind this classification  can be found at Glottolog, with links to the primary research here: [https://glottolog.org/resource/languoid/id/cent2060]https://glottolog.org/resource/languoid/id/cent2060
+
 ----
 
 # Programs used in this Exercise 
@@ -44,7 +48,6 @@ IcyTree ([https://icytree.org](https://icytree.org)) is a browser-based phylogen
 
 # Practical: Creating a language phylogeny
 
-In this tutorial we will analyse a minor selection of Central Pacific languages and focus on the steps that are required in a linguistic analysis. 
 
 ## Installing necessary packages
 First we need to install the `babel` (v. 0.2.1 or above) package for linguistic analyses. Further we will use a Birth-Death model which requires the package `BDSKY` (v. 1.4.5 or above). The latter one can be easily done via the package manager of BEAUti. For `babel` we first need to add extra repositories to the package manager.

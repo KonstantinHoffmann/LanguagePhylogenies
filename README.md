@@ -2,12 +2,12 @@
 author: Simon J. Greenhill, Konstantin Hoffmann
 level: Beginner
 title: Language Phylogenies
-subtitle: Using babel to analyse linguistic data
+subtitle: Using Babel to analyse linguistic data
 beastversion: 2.5.2
 tracerversion: 1.7.1
 ---
 
-# Language Phylogenies: Using babel to analyse linguistic data
+# Language Phylogenies: Using Babel to analyse linguistic data
 
 
 
@@ -50,8 +50,8 @@ IcyTree (https://icytree.org) is a browser-based phylogenetic tree viewer. It is
 
 
 ## Installing necessary packages
-First we need to install the `babel` (v. 0.2.1 or above) package for linguistic analyses. Further we will use a Birth-Death model which requires the package `BDSKY` (v. 1.4.5 or above). The latter one can be easily done via the package manager of BEAUti. For `babel` we first need to add extra repositories to the package manager.
-> Open BEAUti.  Go to `File` and `Manage Packages`, click on `Package repositories`. In the new opened window click on `Add URL`, set the URL to **https://raw.githubusercontent.com/CompEvol/CBAN/master/packages-extra.xml**, click `Ok` and close the repository manager via `Done`. Finally select `babel` from the list and press `Install/Upgrade`. Also install `BDSKY` and optionally (if you want to use a sampled ancestor model) `SA` and **restart BEAUti**.
+First we need to install the `Babel` (v. 0.2.1 or above) package for linguistic analyses. Further we will use a Birth-Death model which requires the package `BDSKY` (v. 1.4.5 or above). The latter one can be easily done via the package manager of BEAUti. For `Babel` we first need to add extra repositories to the package manager.
+> Open BEAUti.  Go to `File` and `Manage Packages`, click on `Package repositories`. In the new opened window click on `Add URL`, set the URL to **https://raw.githubusercontent.com/CompEvol/CBAN/master/packages-extra.xml**, click `Ok` and close the repository manager via `Done`. Finally select `Babel` from the list and press `Install/Upgrade`. Also install `BDSKY` and optionally (if you want to use a sampled ancestor model) `SA` and **restart BEAUti**.
 
 
 
@@ -63,7 +63,7 @@ First we need to install the `babel` (v. 0.2.1 or above) package for linguistic 
 
 ## The data set
 
-Before we start we need to make sure that our data is suitable for an analysis with `babel`. We assume that the alignments consist of **0, 1** and **?** representing the presence, absence or uncertainty of a feature (i.e. cognate or grammatical feature). Babel also assumes that your data has **ascertainment correction** columns. Researchers tend not to collect data that does not vary. This is a form of sampling bias that is often called ascertainment bias {% cite Chang2015 --file LanguagePhylogenies/master_refs.bib  %}. In order to account for that **every first column of every partition of the alignment has to be an ascertainment column**. There all languages have the entry **0** except the ones, where the data is missing, they have a **?**.
+Before we start we need to make sure that our data is suitable for an analysis with `Babel`. We assume that the alignments consist of **0, 1** and **?** representing the presence, absence or uncertainty of a feature (i.e. cognate or grammatical feature). Babel also assumes that your data has **ascertainment correction** columns. Researchers tend not to collect data that does not vary. This is a form of sampling bias that is often called ascertainment bias {% cite Chang2015 --file LanguagePhylogenies/master_refs.bib  %}. In order to account for that **every first column of every partition of the alignment has to be an ascertainment column**. There all languages have the entry **0** except the ones, where the data is missing, they have a **?**.
 
 The data used in this tutorial is an alignment matrix, where each entry represents the presence or absence of a certain cognate in this specific language. If you open the file `cpacific.nex` in a text editor, you can see that there is the alignment matrix and below a text block indicating, which columns belong the which meaning class. Every first entry of each meaning class is an ascertainment column.
 
@@ -87,7 +87,7 @@ The data used in this tutorial is an alignment matrix, where each entry represen
 
 A template in BEAUti sets the interface and allows us to select and modify all the interesting parameters. Depending on the model varying combinations of parameters are necessary. Because BEAUti can not account for all possible models, there are so called templates that preset the interface accordingly.
 
-`babel` comes with some BEAUti-templates that are made specifically for linguistic analyses. These ones are named after the substitution model used in the template. In this tutorial we go with the broadly used Binary Covarion model.
+`Babel` comes with some BEAUti-templates that are made specifically for linguistic analyses. These ones are named after the substitution model used in the template. In this tutorial we go with the broadly used Binary Covarion model.
 
 > In BEAUti go to `File > Template` and choose `Binary Covarion`.
 
@@ -277,7 +277,7 @@ This tutorial is over, but the analysis should not stop here. There are a lot of
 
 ## Nested Sampling
 
-Nested sampling is a great way to compare different models. It gives a marginal likelihood estimate together with a standard deviation. Those can be used to test the support of a model. More about this and a guide on how to set it up in BEAST2 can be found on its github-page https://github.com/BEAST2-Dev/nested-sampling. 
+Nested sampling is a great way to compare different models. It gives a marginal likelihood estimate together with a standard deviation. Those can be used to test the support of a model. More about this and a guide on how to set it up in BEAST2 can be found on its github-page https://github.com/BEAST2-Dev/nested-sampling and there is a tutorial on the Taming the BEAST site.
 
 
 
@@ -287,7 +287,7 @@ Nested sampling is a great way to compare different models. It gives a marginal 
 - Babel package for linguistic analyses in BEAST2: https://github.com/rbouckaert/Babel
 - BDSKY package for BEAST2: https://github.com/BEAST2-Dev/bdsky
 - SA package for ancient languages: https://github.com/CompEvol/sampled-ancestors
-- Nested Sampling: https://github.com/BEAST2-Dev/nested-sampling
+- Nested Sampling: https://github.com/BEAST2-Dev/nested-sampling [tutorial](https://taming-the-beast.org/tutorials/NS-tutorial/)
 
 
 

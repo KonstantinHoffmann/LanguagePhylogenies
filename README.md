@@ -38,9 +38,25 @@ Both BEAST2 and BEAUti2 are Java programs, which means that the exact same code 
 
 Tracer (http://beast.community/tracer) is used to summarise the posterior estimates of the various parameters sampled by the Markov Chain. This program can be used for visual inspection and to assess convergence. It helps to quickly view median estimates and 95% highest posterior density intervals of the parameters, and calculates the effective sample sizes (ESS) of parameters. It can also be used to investigate potential parameter correlations. We will be using Tracer v1.7.1.
 
+###TreeAnnotator
+
+TreeAnnotator is used to summarise the posterior sample of trees to produce a maximum clade credibility tree. It can also be used to summarise and visualise the posterior estimates of other tree parameters (e.g. node height).
+
+TreeAnnotator is provided as a part of the BEAST2 package so you do not need to install it separately.
+
 ### IcyTree
 
 IcyTree (https://icytree.org) is a browser-based phylogenetic tree viewer. It is intended for rapid visualisation of phylogenetic tree files. It can also render phylogenetic networks provided in extended Newick format. IcyTree is compatible with current versions of Mozilla Firefox and Google Chrome.
+
+
+
+### DensiTree
+
+Bayesian analysis using BEAST2 provides an estimate of the uncertainty in tree space. This distribution is represented by a set of trees, which can be rather large and difficult to interpret. DensiTree is a program for qualitative analysis of sets of trees. DensiTree allows to quickly get an impression of properties of the tree set such as well-supported clades, distribution of tree heights and areas of topological uncertainty.
+
+DensiTree is provided as a part of the BEAST2 package so you do not need to install it separately.
+
+
 
 
 
@@ -270,6 +286,20 @@ Then again, IcyTree can be used to show the MCC tree.
 </figure>
 
 Interestingly most of the diversification events happened in the past 1500 years and two approximately 3500 years ago according to this analysis. This might be a clue that a model assuming different birth rates might yield better results.
+
+### Compare tree topologies with `DensiTree`
+
+The first branching event after the root has a fairly low support in our MCC-tree. This means that the topology is just the most likely one, but not neccessarily the correct one as other might also have a decent support. To visualize these other topologies `DensiTree` is a nice tool. A detailed description on how to use `DensiTree` is in the tutorial [Introduction to BEAST2](https://taming-the-beast.org/tutorials/Introduction-to-BEAST2/). Note that we first need to create a tree log file, where the burn-in is discarded. For this purpose you can use the program `LogCombiner`, which is included in the BEAST2 installation. 
+
+> Open LogCombiner. Set the `File Type` to `Tree Files`, press on `+` and select the tree log file (`cpacific.trees`). Click on the `Burnin (percentage)` of your file and set it (in our case) to **50**. Click on `Choose File...` on the bottom and type your output file name (e.g. **cpacific_burnin_removed.trees**). Finally press `Run` and wait until it is finished. 
+> Open DensiTree, click on `File > Load` and select your truncated log file (`cpacific_burnin_removed.trees`). 
+
+<figure>
+	<img style="width:100%;" src="figures/densitree.png" alt="">
+	<figcaption>Densitree shows all different topologies at once</figcaption>
+</figure>
+
+In many trees Fijian clades together with Rotuman, which leads to the low support of Fijian being outside the other languages in the summary tree. However it does not have a big impact on the timing of the diversification events. 
 
 # Further steps
 

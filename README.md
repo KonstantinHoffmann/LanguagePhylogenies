@@ -149,7 +149,7 @@ For simplicity we go for a strict clock in this tutorial, so leave everything in
 
 ### The priors
 
-In this tab we include all our prior knowledge about the evolutionary process to the model. First we need to select a tree prior. There are a lot of possibilities, from a simple Yule model to a complex Birth-Death Skyline model. We would like to try a Birth-Death model with contemporaneous sampling as all our language data is from present date.
+In this tab we include all our prior knowledge about the evolutionary process to the model. First we need to select a tree prior. There are a lot of possibilities, from a simple Yule model to a complex Birth-Death Skyline model. Which one to choose heavily depends on the data. We want to include the knowledge that we may not have sampled all languages and some languages may have gone extinct. Also we don't have any old languages included. A Birth-Death model with contemporaneous sampling incorporates all these things.
 
 > Click on the tab `Priors` and select `Birth Death Skyline Contemporary BDSParam` from the drop down menu.
 

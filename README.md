@@ -289,10 +289,9 @@ Interestingly most of the diversification events happened in the past 1500 years
 
 ### Compare tree topologies with `DensiTree`
 
-The first branching event after the root has a fairly low support in our MCC-tree. This means that the topology is just the most likely one, but not neccessarily the correct one as other might also have a decent support. To visualize these other topologies `DensiTree` is a nice tool. A detailed description on how to use `DensiTree` is in the tutorial [Introduction to BEAST2](https://taming-the-beast.org/tutorials/Introduction-to-BEAST2/). Note that we first need to create a tree log file, where the burn-in is discarded. For this purpose you can use the program `LogCombiner`, which is included in the BEAST2 installation. 
+The first branching event after the root has a fairly low support in our MCC-tree. This means that the topology is just the most likely one, but not neccessarily the correct one as other might also have a decent support. To visualize these other topologies `DensiTree` is a nice tool. A detailed description on how to use `DensiTree` is in the tutorial [Introduction to BEAST2](https://taming-the-beast.org/tutorials/Introduction-to-BEAST2/). 
 
-> Open LogCombiner. Set the `File Type` to `Tree Files`, press on `+` and select the tree log file (`cpacific.trees`). Click on the `Burnin (percentage)` of your file and set it (in our case) to **50**. Click on `Choose File...` on the bottom and type your output file name (e.g. **cpacific_burnin_removed.trees**). Finally press `Run` and wait until it is finished. 
-> Open DensiTree, click on `File > Load` and select your truncated log file (`cpacific_burnin_removed.trees`). 
+> Open DensiTree, click on `File > Load` and select your log file (`cpacific.trees`). Click on the `Burn in`-tab on the right panel and set the burn in (in our case) to $50$.
 
 <figure>
 	<img style="width:100%;" src="figures/densitree.png" alt="">

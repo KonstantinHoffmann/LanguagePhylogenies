@@ -7,9 +7,7 @@ beastversion: 2.5.2
 tracerversion: 1.7.1
 ---
 
-# Language Phylogenies: Using Babel to analyse linguistic data
-
-# Background
+## Background
 
 Bayesian phylogenies are widely used in comparative linguistics. They not only provide information about the relationship of different languages, but also test hypotheses concerning the ages of language families {% cite Bouckaert2012 --file LanguagePhylogenies/master_refs.bib  %}. Dataset can contain grammatical features such as "has productive plural marking on nouns" or statistics of what cognates exist. The languages are then encoded as a binary string representing the presence or absence of these features. This forms the "sequence alignment matrix" on which the phylogeny is built.
 
@@ -19,7 +17,7 @@ This dataset contains binary data demarcating the presence or absence of ‘cogn
 
 ----
 
-# Programs used in this Exercise
+## Programs used in this Exercise
 
 ### BEAST2 - Bayesian Evolutionary Analysis Sampling Trees 2
 
@@ -53,9 +51,10 @@ DensiTree is provided as a part of the BEAST2 package so you do not need to inst
 
 ----
 
-# Practical: Creating a language phylogeny
+## Practical: Creating a language phylogeny
 
-## Installing necessary packages
+### Installing necessary packages
+
 First we need to install the `Babel` (v. 0.2.1 or above) package for linguistic analyses. Further we will use a Birth-Death model which requires the package `BDSKY` (v. 1.4.5 or above). The latter one can be easily done via the package manager of BEAUti. For `Babel` we first need to add extra repositories to the package manager.
 > Open BEAUti.  Go to `File` and `Manage Packages`, click on `Package repositories`. In the new opened window click on `Add URL`, set the URL to **https://raw.githubusercontent.com/CompEvol/CBAN/master/packages-extra.xml**, click `Ok` and close the repository manager via `Done`. Finally select `Babel` from the list and press `Install/Upgrade`. Also install `BDSKY` and optionally (if you want to use a sampled ancestor model) `SA` and **restart BEAUti**.
 
@@ -65,7 +64,7 @@ First we need to install the `Babel` (v. 0.2.1 or above) package for linguistic 
 	<figcaption>The package explorer in BEAUti</figcaption>
 </figure>
 
-## Dataset
+### Dataset
 
 Before we start we need to make sure that our data is suitable for an analysis with `Babel`. We assume that the alignments consist of **0, 1** and **?** representing the presence, absence or uncertainty of a feature (i.e. cognate or grammatical feature). Babel also assumes that your data has **ascertainment correction** columns. Researchers tend not to collect data that does not vary. This is a form of sampling bias that is often called ascertainment bias {% cite Chang2015 --file LanguagePhylogenies/master_refs.bib  %}. In order to account for that **every first column of every partition of the alignment has to be an ascertainment column**. There all languages have the entry **0** except the ones, where the data is missing, they have a **?**.
 
@@ -83,17 +82,17 @@ The data used in this tutorial is an alignment matrix, where each entry represen
 	<figcaption>Columns 1, 6, 12, 16, 19 and 23 are ascertainment columns consisting only of 0 and ?</figcaption>
 </figure>
 
-## Setting up the analysis using BEAUti
+### Setting up the analysis using BEAUti
 
-### Loading the template
+#### Loading the template
 
 A template in BEAUti sets the interface and allows us to select and modify all the interesting parameters. Depending on the model varying combinations of parameters are necessary. Because BEAUti can not account for all possible models, there are so called templates that preset the interface accordingly.
 
-`Babel` comes with some BEAUti-templates that are made specifically for linguistic analyses. These ones are named after the substitution model used in the template. In this tutorial we go with the broadly used Binary Covarion model.
+`Babel` comes with some BEAUti-templates that are made specifically for linguistic analyses. These ones are named after the substitution model used in the template. In this tutorial, we go with the broadly used Binary Covarion model.
 
-> In BEAUti go to `File > Template` and choose `Binary Covarion`.
+> In BEAUti, go to `File > Template` and choose `Binary Covarion`.
 
-### Getting the Data into BEAUti
+#### Getting the Data into BEAUti
 
 Next we will import our dataset.
 
@@ -108,7 +107,7 @@ You should be able to see your alignment on the screen. There is one partition f
 	<figcaption>The alignment loaded and partitions grouped in bins of size 5</figcaption>
 </figure>
 
-### Choosing a site model
+#### Choosing a site model
 
 In the `Site Model` tab we usually choose the substitution model for nucleotide data. However for linguistic data we already made this decision with the choice of the BEAUti-template. So we only need to fill in the model parameters.
 
@@ -123,11 +122,11 @@ Note that one should make multiple analyses with differing substitution models a
 	<figcaption>The site model tab</figcaption>
 </figure>
 
-### Clock Model
+#### Clock Model
 
 For simplicity we go for a strict clock in this tutorial, so leave everything in this tab as it is. You can relax the clock later if you want and it is strongly recommended to try varying clock models and see, which one fits best.
 
-### The priors
+#### The priors
 
 In this tab we include all our prior knowledge about the evolutionary process to the model. First we need to select a tree prior. There are a lot of possibilities, from a simple Yule model to a complex Birth-Death Skyline model. Which one to choose heavily depends on the data. We want to include the knowledge that we may not have sampled all languages and some languages may have gone extinct. Also we don't have any old languages included. A Birth-Death model with contemporaneous sampling incorporates all these things.
 
@@ -186,23 +185,23 @@ Finally we want to make sure that all priors are proper. There are uniform prior
 
 > Expand the prior of `clockRate.c:clock` and set `Upper` to **100** . Do the same for `bcov_alpha.s:bird`.
 
-### The MCMC tab
+#### The MCMC tab
 
 Here we can specify the length of the run as well as the filenames of the output tree file (where the posterior sample of trees is stored) and the log file (where the posterior sample of parameters is stored). For the purpose of this tutorial, we choose a short chain length of 1 million. Usually the chain length should be large enough to yield a high ESS for every parameter (see next section). Finally we want to save our settings and generate a BEAST2-xml file. It is highly recommended to generate another xml-file with the check box `Sample From Prior` ticked. It is used to verify if the data has enough signal to estimate the parameters or if the posterior results are mainly dominated by the prior choice.
 
 > Click on the `MCMC`-tab. Set the chain length to **1000000** and set the filenames of the log files (tracelog and treelog, screenlog can be left empty) by expanding their respective menu. Select `File > Save As` and enter a filename (e.g. **cpacific.xml**) and click `Ok`. Tick the check box next to `Sample from Prior`, change the file names of the trace log files and tree log files (e.g. **cpacific_prior.log** and **cpacific_prior.trees**) and save again with a different filename (e.g. **cpacific_prior.xml**).
 
-## Running the analysis
+### Running the analysis
 
 Now we are ready to do run the file. Open BEAST 2 and select your generated xml-file as input. The computation should take a while (ca. 30 min. on a modern computer), you can watch it progressing or download the finished output-files.
 
 >Open BEAST 2, select `cpacific.xml` as input-file and click `Open`. Repeat this for the sample-from-prior analysis.
 
-## Processing the results
+### Processing the results
 
 BEAST 2 now creates multiple files. The Log-file contains all the information about the inferred parameters, in the tree-file we find a posterior sample of the tree space and finally there is a file `cpacific.xml.state` where the current state of the Markov chain is stored, if we want to continue the analysis at some point starting from this state.
 
-### Burn-In and ESS
+#### Burn-In and ESS
 
 Tracer provides us some summary statistics of the posterior sample. After loading the log-file we see in the top left corner the filename, the amount of states and the burn-in (which is 10% by default). Below there are all the parameters listed together with their mean values and their effective sample size (ESS). This value should -- as a rule of thumb -- be above 200 for each parameter.
 
@@ -217,7 +216,7 @@ The MCMC-algorithm needs some time for the Markov chain to converge to its stati
 
 Note that in this example file, most of the ESSes are below 200 as we the chain length of the MCMC to a rather low value.
 
-### Checking out interesting parameters
+#### Checking out interesting parameters
 
 What are the inferred parameters? How quickly do these languages evolve? There are a lot of values to check, we will go through it. Make sure to compare all results to the ones from the sample-from-prior-run to ensure their validity. Note that the MCMC-algorithm is a stochastic process, so your results might vary a bit from the ones presented here.
 
@@ -236,11 +235,11 @@ Last but not least the **MRCA times** of East Polynesia and New Zealand: New Zea
 	<figcaption>Posterior clade age of East Polynesia compared to its prior belief</figcaption>
 </figure>
 
-## Visualizing the trees
+### Visualizing the trees
 
 Now we will have a look at the generated tree files from the analysis.
 
-### Have a look at all the trees using `IcyTree`
+#### Have a look at all the trees using `IcyTree`
 
 [IcyTree](https://icytree.org) a nice and easy to use web page that displays phylogenetic trees.
 
@@ -248,7 +247,7 @@ Now we will have a look at the generated tree files from the analysis.
 
 This shows us all the trees from our posterior sample. The arrows in the bottom left corner are used to navigate through all the trees.
 
-### MCC tree with `treeannotator`
+#### MCC tree with `treeannotator`
 
 Treeannotator creates a summary tree out of all the trees from the posterior sample excluding the burn in.
 
@@ -265,7 +264,7 @@ Then again, IcyTree can be used to show the MCC tree.
 
 Interestingly most of the diversification events happened in the past 1500 years and two approximately 3500 years ago according to this analysis. This might be a clue that a model assuming different birth rates might yield better results.
 
-### Compare tree topologies with `DensiTree`
+#### Compare tree topologies with `DensiTree`
 
 The first branching event after the root has a fairly low support in our MCC-tree. This means that the topology is just the most likely one, but not neccessarily the correct one as other might also have a decent support. To visualize these other topologies `DensiTree` is a nice tool. A detailed description on how to use `DensiTree` is in the tutorial [Introduction to BEAST2](https://taming-the-beast.org/tutorials/Introduction-to-BEAST2/).
 
@@ -278,15 +277,15 @@ The first branching event after the root has a fairly low support in our MCC-tre
 
 In many trees Fijian clades together with Rotuman, which leads to the low support of Fijian being outside the other languages in the summary tree. However it does not have a big impact on the timing of the diversification events.
 
-# Further steps
+## Further steps
 
 This tutorial is over, but the analysis should not stop here. There are a lot of things to try out and compare: A relaxed clock, other priors on birth and death rate to see how dependent the result are on the priors, varying rates over time, different substitution models and a lot more.
 
-## Nested Sampling
+### Nested Sampling
 
 Nested sampling is a great way to compare different models. It gives a marginal likelihood estimate together with a standard deviation. Those can be used to test the support of a model. More about this and a guide on how to set it up in BEAST2 can be found on its github-page https://github.com/BEAST2-Dev/nested-sampling and there is a tutorial on the Taming the BEAST site.
 
-# Useful Links
+## Useful Links
 
 - BEAST 2 website and documentation: https://www.beast2.org/
 - Babel package for linguistic analyses in BEAST2: https://github.com/rbouckaert/Babel
@@ -294,5 +293,6 @@ Nested sampling is a great way to compare different models. It gives a marginal 
 - SA package for ancient languages: https://github.com/CompEvol/sampled-ancestors
 - Nested Sampling: https://github.com/BEAST2-Dev/nested-sampling [tutorial](https://taming-the-beast.org/tutorials/NS-tutorial/)
 
-# References
+## References
+
 {% bibliography --cited --file LanguagePhylogenies/master_refs.bib  %}

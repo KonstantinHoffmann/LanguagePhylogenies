@@ -283,7 +283,7 @@ This tutorial is over, but the analysis should not stop here. There are a lot of
 
 ### Nested Sampling
 
-Nested sampling is a great way to compare different models. It gives a marginal likelihood estimate together with a standard deviation. Those can be used to test the support of a model. More about this and a guide on how to set it up in BEAST2 can be found on its github-page https://github.com/BEAST2-Dev/nested-sampling and there is a tutorial on the Taming the BEAST site.
+Nested sampling is a great way to compare different models. It gives a marginal likelihood estimate together with a standard deviation. Those can be used to test the support of a model. More about this and a guide on how to set it up in BEAST2 can be found on [its GitHub page](https://github.com/BEAST2-Dev/nested-sampling) and there is a tutorial on the Taming the BEAST site.
 
 ## Useful Links
 

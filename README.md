@@ -65,7 +65,7 @@ First we need to install the `Babel` (v. 0.2.1 or above) package for linguistic 
 	<figcaption>The package explorer in BEAUti</figcaption>
 </figure>
 
-## The data set
+## Dataset
 
 Before we start we need to make sure that our data is suitable for an analysis with `Babel`. We assume that the alignments consist of **0, 1** and **?** representing the presence, absence or uncertainty of a feature (i.e. cognate or grammatical feature). Babel also assumes that your data has **ascertainment correction** columns. Researchers tend not to collect data that does not vary. This is a form of sampling bias that is often called ascertainment bias {% cite Chang2015 --file LanguagePhylogenies/master_refs.bib  %}. In order to account for that **every first column of every partition of the alignment has to be an ascertainment column**. There all languages have the entry **0** except the ones, where the data is missing, they have a **?**.
 
@@ -95,7 +95,7 @@ A template in BEAUti sets the interface and allows us to select and modify all t
 
 ### Getting the Data into BEAUti
 
-Next we will import our data set.
+Next we will import our dataset.
 
 > Go to  `File > Add Alignment`, select the file `cpacific.nex`  and click on `Ok`.
 
@@ -137,7 +137,7 @@ Note that there are two contemporary BDSKY-models `Birth Death Skyline Contempor
 
 It comes with three parameters, the **birth rate** {% eqinline \lambda %}, the **death rate {% eqinline \mu %}** and the **sampling proportion {% eqinline \rho %}**. In terms of language evolution a birth event happens, if there is a diversification of two languages and a death event is a language going extinct. The sampling proportion is the relative amount of languages in our analysis compared to the total amount of languages existing in the clade.
 
-These three parameters are correlated to each other, so we need to have a strong prior for at least one of these parameters in order to robustly estimate the others. It makes sense to chose the sampling proportion as we know of almost every language spoken in the world. Glottolog {% cite Glottolog --file LanguagePhylogenies/master_refs.bib  %} lists 45 Central Pacific languages and we have 20 of them in our data set, so we would expect a sampling proportion of ca. 44%. A good candidate for {% eqinline \rho %} is the Beta distribution: It allows values between 0 and 1 and has most of its weight centered around its mean {% eqinline \frac{a}{a+b} %}, where we chose for {% eqinline a%} the amount of sampled languages and for {% eqinline b %} the amount of unsampled languages.
+These three parameters are correlated to each other, so we need to have a strong prior for at least one of these parameters in order to robustly estimate the others. It makes sense to chose the sampling proportion as we know of almost every language spoken in the world. Glottolog {% cite Glottolog --file LanguagePhylogenies/master_refs.bib  %} lists 45 Central Pacific languages and we have 20 of them in our dataset, so we would expect a sampling proportion of ca. 44%. A good candidate for {% eqinline \rho %} is the Beta distribution: It allows values between 0 and 1 and has most of its weight centered around its mean {% eqinline \frac{a}{a+b} %}, where we chose for {% eqinline a%} the amount of sampled languages and for {% eqinline b %} the amount of unsampled languages.
 
 <figure>
 	<img style="width:100%;" src="figures/BetaPrior.png" alt="">

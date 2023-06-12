@@ -287,11 +287,12 @@ Nested sampling is a great way to compare different models. It gives a marginal 
 
 ## Useful Links
 
-- BEAST 2 website and documentation: https://www.beast2.org/
-- Babel package for linguistic analyses in BEAST2: https://github.com/rbouckaert/Babel
-- BDSKY package for BEAST2: https://github.com/BEAST2-Dev/bdsky
-- SA package for ancient languages: https://github.com/CompEvol/sampled-ancestors
-- Nested Sampling: https://github.com/BEAST2-Dev/nested-sampling [tutorial](https://taming-the-beast.org/tutorials/NS-tutorial/)
+- [BEAST 2 website and documentation](https://www.beast2.org/)
+- [Babel package for linguistic analyses in BEAST2](https://github.com/rbouckaert/Babel)
+- [BDSKY package for BEAST2](https://github.com/BEAST2-Dev/bdsky)
+- [SA package for ancient languages](https://github.com/CompEvol/sampled-ancestors)
+- [Nested Sampling](https://github.com/BEAST2-Dev/nested-sampling)
+    - [Tutorial](https://taming-the-beast.org/tutorials/NS-tutorial/)
 
 ## References
 

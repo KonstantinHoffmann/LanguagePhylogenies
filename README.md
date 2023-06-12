@@ -13,9 +13,9 @@ tracerversion: 1.7.1
 
 # Background
 
-Bayesian phylogenies are widely used in comparative linguistics. They provide not only information about the relationship of different languages, but also test hypotheses concerning the ages of language families {% cite Bouckaert2012 --file LanguagePhylogenies/master_refs.bib  %}. The data set can contain grammatical features such as "has productive plural marking on nouns" or statistics of what cognates exist. The languages are then encoded as a binary string representing the presence or absence of these features. This forms the "sequence alignment matrix" on which the phylogeny is built.
+Bayesian phylogenies are widely used in comparative linguistics. They not only provide information about the relationship of different languages, but also test hypotheses concerning the ages of language families {% cite Bouckaert2012 --file LanguagePhylogenies/master_refs.bib  %}. Dataset can contain grammatical features such as "has productive plural marking on nouns" or statistics of what cognates exist. The languages are then encoded as a binary string representing the presence or absence of these features. This forms the "sequence alignment matrix" on which the phylogeny is built.
 
-In this tutorial we will analyse a minor selection of Central Pacific languages and focus on the steps that are required in a linguistic analysis. These linguistic data come from 20 languages spoken in Polynesia in the Pacific including Hawaiian, Fijian, Tahitian, Tongan, Samoan, Rapanui (spoken on Easter Island) and Maori (spoken in New Zealand). This group of languages form the "Central Pacific” clade of the great Austronesian language family which originated in Taiwan around 5000 years ago, and spread though-out the Pacific from Madagascar to Easter Island {% cite Gray2009 --file LanguagePhylogenies/master_refs.bib  %}. 
+In this tutorial we will analyse a minor selection of Central Pacific languages and focus on the steps that are required in a linguistic analysis. These linguistic data come from 20 languages spoken in Polynesia in the Pacific including Hawaiian, Fijian, Tahitian, Tongan, Samoan, Rapanui (spoken on Easter Island) and Maori (spoken in New Zealand). This group of languages form the "Central Pacific” clade of the great Austronesian language family which originated in Taiwan around 5000 years ago, and spread throughout the Pacific from Madagascar to Easter Island {% cite Gray2009 --file LanguagePhylogenies/master_refs.bib  %}. 
 
 This dataset contains binary data demarcating the presence or absence of ‘cognates’, which are homologous word forms inherited from the common ancestor of these languages (“Proto-Central Pacific”). The raw linguistic data are available on the [Austronesian Basic Vocabulary Database website](https://abvd.shh.mpg.de/austronesian/), and more information about the relationships of these languages and the research behind this classification  can be found at Glottolog, with links to the primary research here: https://glottolog.org/resource/languoid/id/cent2060.
 
@@ -25,7 +25,7 @@ This dataset contains binary data demarcating the presence or absence of ‘cogn
 
 ### BEAST2 - Bayesian Evolutionary Analysis Sampling Trees 2
 
-BEAST2 (http://www.beast2.org) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v2.5.2
+BEAST2 (https://www.beast2.org) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v2.5.2
 
 
 ### BEAUti2 - Bayesian Evolutionary Analysis Utility
@@ -36,7 +36,7 @@ Both BEAST2 and BEAUti2 are Java programs, which means that the exact same code 
 
 ### Tracer
 
-Tracer (http://beast.community/tracer) is used to summarise the posterior estimates of the various parameters sampled by the Markov Chain. This program can be used for visual inspection and to assess convergence. It helps to quickly view median estimates and 95% highest posterior density intervals of the parameters, and calculates the effective sample sizes (ESS) of parameters. It can also be used to investigate potential parameter correlations. We will be using Tracer v1.7.1.
+Tracer (https://beast.community/tracer) is used to summarise the posterior estimates of the various parameters sampled by the Markov Chain. This program can be used for visual inspection and to assess convergence. It helps to quickly view median estimates and 95% highest posterior density intervals of the parameters, and calculates the effective sample sizes (ESS) of parameters. It can also be used to investigate potential parameter correlations. We will be using Tracer v1.7.1.
 
 ###TreeAnnotator
 

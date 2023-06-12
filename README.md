@@ -9,24 +9,21 @@ tracerversion: 1.7.1
 
 # Language Phylogenies: Using Babel to analyse linguistic data
 
-
-
 # Background
 
 Bayesian phylogenies are widely used in comparative linguistics. They not only provide information about the relationship of different languages, but also test hypotheses concerning the ages of language families {% cite Bouckaert2012 --file LanguagePhylogenies/master_refs.bib  %}. Dataset can contain grammatical features such as "has productive plural marking on nouns" or statistics of what cognates exist. The languages are then encoded as a binary string representing the presence or absence of these features. This forms the "sequence alignment matrix" on which the phylogeny is built.
 
-In this tutorial we will analyse a minor selection of Central Pacific languages and focus on the steps that are required in a linguistic analysis. These linguistic data come from 20 languages spoken in Polynesia in the Pacific including Hawaiian, Fijian, Tahitian, Tongan, Samoan, Rapanui (spoken on Easter Island) and Maori (spoken in New Zealand). This group of languages form the "Central Pacific” clade of the great Austronesian language family which originated in Taiwan around 5000 years ago, and spread throughout the Pacific from Madagascar to Easter Island {% cite Gray2009 --file LanguagePhylogenies/master_refs.bib  %}. 
+In this tutorial we will analyse a minor selection of Central Pacific languages and focus on the steps that are required in a linguistic analysis. These linguistic data come from 20 languages spoken in Polynesia in the Pacific including Hawaiian, Fijian, Tahitian, Tongan, Samoan, Rapanui (spoken on Easter Island) and Maori (spoken in New Zealand). This group of languages form the "Central Pacific” clade of the great Austronesian language family which originated in Taiwan around 5000 years ago, and spread throughout the Pacific from Madagascar to Easter Island {% cite Gray2009 --file LanguagePhylogenies/master_refs.bib  %}.
 
 This dataset contains binary data demarcating the presence or absence of ‘cognates’, which are homologous word forms inherited from the common ancestor of these languages (“Proto-Central Pacific”). The raw linguistic data are available on the [Austronesian Basic Vocabulary Database website](https://abvd.shh.mpg.de/austronesian/), and more information about the relationships of these languages and the research behind this classification  can be found at Glottolog, with links to the primary research here: https://glottolog.org/resource/languoid/id/cent2060.
 
 ----
 
-# Programs used in this Exercise 
+# Programs used in this Exercise
 
 ### BEAST2 - Bayesian Evolutionary Analysis Sampling Trees 2
 
-BEAST2 (https://www.beast2.org) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v2.5.2
-
+BEAST2 ([beast2.org](https://www.beast2.org)) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v2.5.2
 
 ### BEAUti2 - Bayesian Evolutionary Analysis Utility
 
@@ -36,9 +33,9 @@ Both BEAST2 and BEAUti2 are Java programs, which means that the exact same code 
 
 ### Tracer
 
-Tracer (https://beast.community/tracer) is used to summarise the posterior estimates of the various parameters sampled by the Markov Chain. This program can be used for visual inspection and to assess convergence. It helps to quickly view median estimates and 95% highest posterior density intervals of the parameters, and calculates the effective sample sizes (ESS) of parameters. It can also be used to investigate potential parameter correlations. We will be using Tracer v1.7.1.
+Tracer ([beast.community/tracer](http://beast.community/tracer)) is used to summarise the posterior estimates of the various parameters sampled by the Markov Chain. This program can be used for visual inspection and to assess convergence. It helps to quickly view median estimates and 95% highest posterior density intervals of the parameters, and calculates the effective sample sizes (ESS) of parameters. It can also be used to investigate potential parameter correlations. We will be using Tracer v1.7.1.
 
-###TreeAnnotator
+### TreeAnnotator
 
 TreeAnnotator is used to summarise the posterior sample of trees to produce a maximum clade credibility tree. It can also be used to summarise and visualise the posterior estimates of other tree parameters (e.g. node height).
 
@@ -46,9 +43,7 @@ TreeAnnotator is provided as a part of the BEAST2 package so you do not need to 
 
 ### IcyTree
 
-IcyTree (https://icytree.org) is a browser-based phylogenetic tree viewer. It is intended for rapid visualisation of phylogenetic tree files. It can also render phylogenetic networks provided in extended Newick format. IcyTree is compatible with current versions of Mozilla Firefox and Google Chrome.
-
-
+IcyTree ([icytree.org](https://icytree.org)) is a browser-based phylogenetic tree viewer. It is intended for rapid visualisation of phylogenetic tree files. It can also render phylogenetic networks provided in extended Newick format. IcyTree is compatible with current versions of Mozilla Firefox and Google Chrome.
 
 ### DensiTree
 
@@ -56,20 +51,13 @@ Bayesian analysis using BEAST2 provides an estimate of the uncertainty in tree s
 
 DensiTree is provided as a part of the BEAST2 package so you do not need to install it separately.
 
-
-
-
-
 ----
 
 # Practical: Creating a language phylogeny
 
-
 ## Installing necessary packages
 First we need to install the `Babel` (v. 0.2.1 or above) package for linguistic analyses. Further we will use a Birth-Death model which requires the package `BDSKY` (v. 1.4.5 or above). The latter one can be easily done via the package manager of BEAUti. For `Babel` we first need to add extra repositories to the package manager.
 > Open BEAUti.  Go to `File` and `Manage Packages`, click on `Package repositories`. In the new opened window click on `Add URL`, set the URL to **https://raw.githubusercontent.com/CompEvol/CBAN/master/packages-extra.xml**, click `Ok` and close the repository manager via `Done`. Finally select `Babel` from the list and press `Install/Upgrade`. Also install `BDSKY` and optionally (if you want to use a sampled ancestor model) `SA` and **restart BEAUti**.
-
-
 
 <figure>
 	<a id="fig:packages"></a>
@@ -95,8 +83,6 @@ The data used in this tutorial is an alignment matrix, where each entry represen
 	<figcaption>Columns 1, 6, 12, 16, 19 and 23 are ascertainment columns consisting only of 0 and ?</figcaption>
 </figure>
 
-
-
 ## Setting up the analysis using BEAUti
 
 ### Loading the template
@@ -109,7 +95,7 @@ A template in BEAUti sets the interface and allows us to select and modify all t
 
 ### Getting the Data into BEAUti
 
-Next we will import our data set. 
+Next we will import our data set.
 
 > Go to  `File > Add Alignment`, select the file `cpacific.nex`  and click on `Ok`.
 
@@ -122,15 +108,13 @@ You should be able to see your alignment on the screen. There is one partition f
 	<figcaption>The alignment loaded and partitions grouped in bins of size 5</figcaption>
 </figure>
 
-
-
 ### Choosing a site model
 
 In the `Site Model` tab we usually choose the substitution model for nucleotide data. However for linguistic data we already made this decision with the choice of the BEAUti-template. So we only need to fill in the model parameters.
 
 In the Binary Covarion model each character can have one of four states that are divided into **visible states** and **hidden states**. The visible ones are **0** and **1** and the hidden ones are **fast** and **slow**. Characters change their binary state at a rate **1** in the fast state and at rate **alpha** in the slow state. Furthermore they are allowed to change from one of the hidden categories to another at a **switch rate s**.
 
-For now we stick with the default values of **alpha=0.5, s=0.5** and all the frequencies set to **0.5**. Also we want to set the amount of gamma categories to zero in order to have no rate variation across sites. There are three different implementations of the Binary Covarion model, `BEAST`, `REVERSIBLE` and `TUFFLEYSTEEL`. Unless you know, what you are doing, stick with the default one `BEAST`. 
+For now we stick with the default values of **alpha=0.5, s=0.5** and all the frequencies set to **0.5**. Also we want to set the amount of gamma categories to zero in order to have no rate variation across sites. There are three different implementations of the Binary Covarion model, `BEAST`, `REVERSIBLE` and `TUFFLEYSTEEL`. Unless you know, what you are doing, stick with the default one `BEAST`.
 
 Note that one should make multiple analyses with differing substitution models and check, which one performs best.
 
@@ -139,13 +123,9 @@ Note that one should make multiple analyses with differing substitution models a
 	<figcaption>The site model tab</figcaption>
 </figure>
 
-
-
 ### Clock Model
 
 For simplicity we go for a strict clock in this tutorial, so leave everything in this tab as it is. You can relax the clock later if you want and it is strongly recommended to try varying clock models and see, which one fits best.
-
-
 
 ### The priors
 
@@ -153,11 +133,11 @@ In this tab we include all our prior knowledge about the evolutionary process to
 
 > Click on the tab `Priors` and select `Birth Death Skyline Contemporary BDSParam` from the drop down menu.
 
-Note that there are two contemporary BDSKY-models `Birth Death Skyline Contemporary` and `Birth Death Skyline Contemporary BDSParam` . The difference between these two is that the latter uses the parameters **birth rate** and **death rate** and creates trees starting with their root, while the former uses **reproductive number** (which is birth rate over death rate) and **become uninfectious rate** and starts with the origin of a tree. For our case it makes more sense to use the birth-death-parametrization. 
+Note that there are two contemporary BDSKY-models `Birth Death Skyline Contemporary` and `Birth Death Skyline Contemporary BDSParam` . The difference between these two is that the latter uses the parameters **birth rate** and **death rate** and creates trees starting with their root, while the former uses **reproductive number** (which is birth rate over death rate) and **become uninfectious rate** and starts with the origin of a tree. For our case it makes more sense to use the birth-death-parametrization.
 
 It comes with three parameters, the **birth rate** {% eqinline \lambda %}, the **death rate {% eqinline \mu %}** and the **sampling proportion {% eqinline \rho %}**. In terms of language evolution a birth event happens, if there is a diversification of two languages and a death event is a language going extinct. The sampling proportion is the relative amount of languages in our analysis compared to the total amount of languages existing in the clade.
 
-These three parameters are correlated to each other, so we need to have a strong prior for at least one of these parameters in order to robustly estimate the others. It makes sense to chose the sampling proportion as we know of almost every language spoken in the world. Glottolog {% cite Glottolog --file LanguagePhylogenies/master_refs.bib  %} lists 45 Central Pacific languages and we have 20 of them in our data set, so we would expect a sampling proportion of ca. 44%. A good candidate for {% eqinline \rho %} is the Beta distribution: It allows values between 0 and 1 and has most of its weight centered around its mean {% eqinline \frac{a}{a+b} %}, where we chose for {% eqinline a%} the amount of sampled languages and for {% eqinline b %} the amount of unsampled languages. 
+These three parameters are correlated to each other, so we need to have a strong prior for at least one of these parameters in order to robustly estimate the others. It makes sense to chose the sampling proportion as we know of almost every language spoken in the world. Glottolog {% cite Glottolog --file LanguagePhylogenies/master_refs.bib  %} lists 45 Central Pacific languages and we have 20 of them in our data set, so we would expect a sampling proportion of ca. 44%. A good candidate for {% eqinline \rho %} is the Beta distribution: It allows values between 0 and 1 and has most of its weight centered around its mean {% eqinline \frac{a}{a+b} %}, where we chose for {% eqinline a%} the amount of sampled languages and for {% eqinline b %} the amount of unsampled languages.
 
 <figure>
 	<img style="width:100%;" src="figures/BetaPrior.png" alt="">
@@ -175,7 +155,7 @@ We don't know how quickly languages die out or emerge, but we know for sure that
 Next we want to add some priors for time calibration. According to {% cite Wilmshurst2010 --file LanguagePhylogenies/master_refs.bib  %}, the settlement of New Zealand can be securely dated to between 1230-1282 A.D. We have two dialects of New Zealand Maori in these data: Maori and SouthIslandMaori. Let’s operationalize this calibration like this: If we assume that the present is a nice round number like the year 2000 (this makes interpretation easier), then we convert this to before present:
 
 ```
-2000 - 1230 = 770 years ago 
+2000 - 1230 = 770 years ago
 2000 - 1282 = 718 years ago
 ```
 
@@ -212,8 +192,6 @@ Here we can specify the length of the run as well as the filenames of the output
 
 > Click on the `MCMC`-tab. Set the chain length to **1000000** and set the filenames of the log files (tracelog and treelog, screenlog can be left empty) by expanding their respective menu. Select `File > Save As` and enter a filename (e.g. **cpacific.xml**) and click `Ok`. Tick the check box next to `Sample from Prior`, change the file names of the trace log files and tree log files (e.g. **cpacific_prior.log** and **cpacific_prior.trees**) and save again with a different filename (e.g. **cpacific_prior.xml**).
 
-
-
 ## Running the analysis
 
 Now we are ready to do run the file. Open BEAST 2 and select your generated xml-file as input. The computation should take a while (ca. 30 min. on a modern computer), you can watch it progressing or download the finished output-files.
@@ -226,7 +204,7 @@ BEAST 2 now creates multiple files. The Log-file contains all the information ab
 
 ### Burn-In and ESS
 
-Tracer provides us some summary statistics of the posterior sample. After loading the log-file we see in the top left corner the filename, the amount of states and the burn-in (which is 10% by default). Below there are all the parameters listed together with their mean values and their effective sample size (ESS). This value should -- as a rule of thumb -- be above 200 for each parameter. 
+Tracer provides us some summary statistics of the posterior sample. After loading the log-file we see in the top left corner the filename, the amount of states and the burn-in (which is 10% by default). Below there are all the parameters listed together with their mean values and their effective sample size (ESS). This value should -- as a rule of thumb -- be above 200 for each parameter.
 
 The MCMC-algorithm needs some time for the Markov chain to converge to its stationary state. Click on a parameter and then on `Trace` in the right window. If you can see big jumps, then this is a strong hint that the chain has not converged yet. The first fraction of the run, where the algorithm has not converged yet is called **burn-in** and is discarded. We can adjust the burn-in by clicking on it and typing a new value that covers all observable big jumps.
 
@@ -260,11 +238,11 @@ Last but not least the **MRCA times** of East Polynesia and New Zealand: New Zea
 
 ## Visualizing the trees
 
-Now we will have a look at the generated tree files from the analysis. 
+Now we will have a look at the generated tree files from the analysis.
 
 ### Have a look at all the trees using `IcyTree`
 
-[IcyTree](https://icytree.org) a nice and easy to use web page that displays phylogenetic trees. 
+[IcyTree](https://icytree.org) a nice and easy to use web page that displays phylogenetic trees.
 
 > Open the page https://icytree.org in a web browser. Go to `File > Load from file...` and select your tree file (`cpacific.trees`). Press `a` to see a time axis.
 
@@ -276,7 +254,7 @@ Treeannotator creates a summary tree out of all the trees from the posterior sam
 
 > Open Treeannotator. Set the `Burnin percentage` to **50** percent and specify your input (`cpacific.trees`) and output file (e.g. `cpacific_annotated.trees`). Click on `Run` to start the process.
 
-Then again, IcyTree can be used to show the MCC tree. 
+Then again, IcyTree can be used to show the MCC tree.
 
 > Open again icytree.org and load your annotated tree file. Press `a` to display the time axis. Go to `Style > Internal node text > posterior`  and then to `Style > Node height error bars > height_95%_HPD`. You should now be able to see the posterior probabilities of all the nodes together with their height HPD intervals.
 
@@ -289,7 +267,7 @@ Interestingly most of the diversification events happened in the past 1500 years
 
 ### Compare tree topologies with `DensiTree`
 
-The first branching event after the root has a fairly low support in our MCC-tree. This means that the topology is just the most likely one, but not neccessarily the correct one as other might also have a decent support. To visualize these other topologies `DensiTree` is a nice tool. A detailed description on how to use `DensiTree` is in the tutorial [Introduction to BEAST2](https://taming-the-beast.org/tutorials/Introduction-to-BEAST2/). 
+The first branching event after the root has a fairly low support in our MCC-tree. This means that the topology is just the most likely one, but not neccessarily the correct one as other might also have a decent support. To visualize these other topologies `DensiTree` is a nice tool. A detailed description on how to use `DensiTree` is in the tutorial [Introduction to BEAST2](https://taming-the-beast.org/tutorials/Introduction-to-BEAST2/).
 
 > Open DensiTree, click on `File > Load` and select your log file (`cpacific.trees`). Click on the `Burn in`-tab on the right panel and set the burn in (in our case) to $50$.
 
@@ -298,17 +276,15 @@ The first branching event after the root has a fairly low support in our MCC-tre
 	<figcaption>Densitree shows all different topologies at once</figcaption>
 </figure>
 
-In many trees Fijian clades together with Rotuman, which leads to the low support of Fijian being outside the other languages in the summary tree. However it does not have a big impact on the timing of the diversification events. 
+In many trees Fijian clades together with Rotuman, which leads to the low support of Fijian being outside the other languages in the summary tree. However it does not have a big impact on the timing of the diversification events.
 
 # Further steps
 
-This tutorial is over, but the analysis should not stop here. There are a lot of things to try out and compare: A relaxed clock, other priors on birth and death rate to see how dependent the result are on the priors, varying rates over time, different substitution models and a lot more. 
+This tutorial is over, but the analysis should not stop here. There are a lot of things to try out and compare: A relaxed clock, other priors on birth and death rate to see how dependent the result are on the priors, varying rates over time, different substitution models and a lot more.
 
 ## Nested Sampling
 
 Nested sampling is a great way to compare different models. It gives a marginal likelihood estimate together with a standard deviation. Those can be used to test the support of a model. More about this and a guide on how to set it up in BEAST2 can be found on its github-page https://github.com/BEAST2-Dev/nested-sampling and there is a tutorial on the Taming the BEAST site.
-
-
 
 # Useful Links
 
@@ -317,8 +293,6 @@ Nested sampling is a great way to compare different models. It gives a marginal 
 - BDSKY package for BEAST2: https://github.com/BEAST2-Dev/bdsky
 - SA package for ancient languages: https://github.com/CompEvol/sampled-ancestors
 - Nested Sampling: https://github.com/BEAST2-Dev/nested-sampling [tutorial](https://taming-the-beast.org/tutorials/NS-tutorial/)
-
-
 
 # References
 {% bibliography --cited --file LanguagePhylogenies/master_refs.bib  %}

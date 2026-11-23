@@ -51,7 +51,7 @@ Both BEAST2 and BEAUti2 are Java programs, which means that the exact same code 
 
 Tracer (http://beast.community/tracer) is used to summarise the posterior estimates of the various parameters sampled by the Markov Chain. This program can be used for visual inspection and to assess convergence. It helps to quickly view median estimates and 95% highest posterior density intervals of the parameters, and calculates the effective sample sizes (ESS) of parameters. It can also be used to investigate potential parameter correlations. We will be using Tracer v1.7.1.
 
-###TreeAnnotator
+### TreeAnnotator
 
 TreeAnnotator is used to summarise the posterior sample of trees to produce a maximum clade credibility tree. It can also be used to summarise and visualise the posterior estimates of other tree parameters (e.g. node height).
 
@@ -60,8 +60,6 @@ TreeAnnotator is provided as a part of the BEAST2 package so you do not need to 
 ### IcyTree
 
 IcyTree (https://icytree.org) is a browser-based phylogenetic tree viewer. It is intended for rapid visualisation of phylogenetic tree files. It can also render phylogenetic networks provided in extended Newick format. IcyTree is compatible with current versions of Mozilla Firefox and Google Chrome.
-
-
 
 ### DensiTree
 

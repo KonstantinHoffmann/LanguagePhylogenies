@@ -1,10 +1,23 @@
 ---
 author: Simon J. Greenhill, Konstantin Hoffmann
-level: Beginner
 title: Language Phylogenies
 subtitle: Using Babel to analyse linguistic data
-beastversion: 2.5.2
 tracerversion: 1.7.1
+beastversion_tutorial: 2.5.2
+workflow: Basic workflow
+status: current
+keywords:
+- strict clock
+- substitution models
+- calibration
+- cognate data
+packages:
+- Babel
+- BDSKY
+- SA
+domains:
+- language evolution
+beastversion_package: '2.7'
 ---
 
 # Language Phylogenies: Using Babel to analyse linguistic data

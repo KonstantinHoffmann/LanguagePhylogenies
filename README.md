@@ -123,7 +123,7 @@ In the `Site Model` tab we usually choose the substitution model for nucleotide 
 
 In the Binary Covarion model each character can have one of four states that are divided into **visible states** and **hidden states**. The visible ones are **0** and **1** and the hidden ones are **fast** and **slow**. Characters change their binary state at a rate **1** in the fast state and at rate **alpha** in the slow state. Furthermore they are allowed to change from one of the hidden categories to another at a **switch rate s**.
 
-For now we stick with the default values of **alpha=0.5, Switch rate=0.5** and all the frequencies set to **0.5**. If we wanted to add gamma distributed rate heterogeneity we could set `Gamma Category Count` here to a number like 4. 
+For now we stick with the default values of **alpha=0.5, Switch rate=0.5** and all the frequencies set to **0.5**. These are only starting values: the frequencies are estimated during the run. If we wanted to add gamma distributed rate heterogeneity we could set `Gamma Category Count` here to a number like 4. 
 
 Note that one should make multiple analyses with differing substitution models and check which one performs best.
 
@@ -209,7 +209,7 @@ The average of these estimates is about 1000 years ago, and they are spread on b
 	<figcaption>The calibration priors</figcaption>
 </figure>
 
-Finally we want to make sure that all priors are proper. There are uniform priors without upper bound for the clock rate and the slow mutation rate from the Binary Covarion model. One should choose a value that is large enough that the traces don't get close to it. 1 should be generous enough for both parameters. However the analysis will run if you skip this step and might yield useful results, but if we want to compare different analyses and estimate their marginal likelihood it is essential to only have proper priors.
+Finally we want to make sure that all priors are proper. There are uniform priors without upper bound for the clock rate and the slow mutation rate from the Binary Covarion model. One should choose a value that is large enough that the traces don't get close to it. The clock rate is a rate per year and the slow mutation rate is a proportion of the fast rate, so 1 is far above anything plausible and is generous enough for both parameters. However the analysis will run if you skip this step and might yield useful results, but if we want to compare different analyses and estimate their marginal likelihood it is essential to only have proper priors.
 
 > Expand the prior of `clockRate.c:clock` and set `Upper` to **1** . Do the same for `bcov_alpha.s:cpacific`.
 
@@ -227,7 +227,7 @@ It is highly recommended to generate another xml-file with the check box `Sample
 
 ## Running the analysis
 
-Now we are ready to run the file. Open BEAST 2 and select your generated xml-file as input. The computation should take a while (ca. 30 min. on a modern computer), you can watch it progressing or download the finished output-files and carry on the tutorial with them.
+Now we are ready to run the file. Open BEAST 2 and select your generated xml-file as input. The computation should take a while (ca. 30 min. on a modern computer), you can watch it progressing or use the finished output files in the `precooked_runs` folder of this tutorial (`cpacific.log`, `cpacific.trees`, `cpacific_prior.log`, `cpacific_prior.trees`) and carry on with them. These were run for 10 million generations.
 
 >Open BEAST 2, click `Choose File...`, select `cpacific.xml` and click `Open`, then click `Run`. Repeat this for the sample-from-prior analysis.
 
@@ -248,7 +248,7 @@ The MCMC-algorithm needs some time for the Markov chain to converge to its stati
 
 > Open Tracer, click on the `+` in the top left corner to import trace files. Select `cpacific.log`and `cpacific_prior.log` and press `Ok`.
 
-Note that in this example file, most of the ESSes are below 200 as we set the chain length of the MCMC to a rather low value. The full analysis in `precooked_runs` is nice and stable.
+Note that in this example file, most of the ESSes are below 200 as we set the chain length of the MCMC to a rather low value. The longer 10 million generation run in `precooked_runs` has an ESS above 200 for every parameter.
 
 ### Checking out interesting parameters
 
@@ -285,7 +285,7 @@ Treeannotator creates a summary tree out of all the trees from the posterior sam
 
 > Open Treeannotator. Set the `Burnin percentage` to **10** percent and specify your input (`cpacific.trees`) and output file (e.g. `cpacific_annotated.trees`). Click on `Run` to start the process.
 
-You can also just use the MCC tree I made in precooked_runs called `cpacific_annotated.trees`.
+You can also use the MCC tree from the 10 million generation run, `precooked_runs/cpacific_annotated.trees`.
 
 Again IcyTree can be used to show the MCC tree. 
 

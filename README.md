@@ -188,11 +188,7 @@ that the lognormal puts a higher probability mass on the more recent side of tha
 range: this is saying that this group would definitely have diverged by 715 years
 ago (with a mean of 730 years) but could have diverged earlier than that. 
 
-> In the priors tab select `+ Add Prior`. You should see a dialog popping up, choose `MRCA prior` and click `Ok`. In the box next to `Taxon Set Label` type **NewZealand**. Search **Maori** and **SouthIslandMaori** in the list, select them and press `>>` to include them in our phylogenetic constraint. At the end press `OK`. Now you should see the `NewZealand.prior` appearing on the priors tab.
-> 
-Now set up the age calibration on that node.
-
->   Check the box `monophyletic` and select the distribution `Log Normal`. Click on the black triangle on the left to specify the parameters of the distribution. Set `M` to **17**, `S` to **0.9**, and `Offset` to **713**. Make sure to have `Mean In Real Space` selected.
+> In the priors tab select `+ Add Prior`. You should see a dialog popping up, choose `MRCA prior` and click `Ok`. In the box next to `Taxon Set Label` type **NewZealand**. Search **Maori** and **SouthIslandMaori** in the list, select them and press `>>` to include them in our phylogenetic constraint. At the end press `OK`. Now you should see the `NewZealand.prior` appearing on the priors tab. Check the box `monophyletic` and select the distribution `Log Normal`. Click on the black triangle on the left to specify the parameters of the distribution. Set `M` to **17**, `S` to **0.9**, and `Offset` to **713**. Make sure to have `Mean In Real Space` selected.
 
 Another good calibration is East Polynesian: It is a well-attested linguistic group and we have good archaeological evidence for when the initial settlement of East Polynesia began. However the ages are a bit controversial between “short” and “long” chronologies e.g.:
 
@@ -258,9 +254,9 @@ Note that in this example file, most of the ESSes are below 200 as we the chain 
 
 What are the inferred parameters? How quickly do these languages evolve? There are a lot of values to check, we will go through it. Make sure to compare all results to the ones from the sample-from-prior-run to ensure their validity. Note that the MCMC-algorithm is a stochastic process, so your results might vary a bit from the ones presented here.
 
-**Posterior, prior** and **likelihood**: The posterior -- the product of prior and likelihood -- is the value that the MCMC-algorithm optimizes.
+**Posterior, prior** and **likelihood**: The posterior is proportional to the product of prior and likelihood, and is the distribution the MCMC-algorithm samples from.
 
-More interesting is the **tree height** (here `Tree.t:tree.height`).  Archaeologists suggest that the first settlement of Fiji happened ca. 3200 years ago. Our estimate has a mean of roughly 3500 years, which seems to be quite far off, but 3200 is still in its 95% HPD interval (which you can see on the `Estimates` tab as between 2769 -- 5561 years).
+More interesting is the **tree height** (here `Tree.t:tree.height`).  Archaeologists suggest that the first settlement of Fiji happened ca. 3200 years ago. Our estimate has a mean of roughly 3500 years, which seems to be quite far off, but 3200 is still in its 95% HPD interval (which you can see on the `Estimates` tab as between 2769 -- 4328 years).
 
 Below are the parameters of the Binary Covarion model followed by the ones of the Birth-death model. We would like to compare the prior with the posterior. In the top left corner you can select both trace files at once (by holding down `ctrl` while clicking). Select e.g. the birth rate parameter and click on `Marginal Density` to see how the data influenced the prior assumptions. In our case the posterior **birth** and **death rates** are overlapping with their prior beliefs, but narrowing down the confidence interval towards much lower rates. The **sampling proportion** matches its prior, which is no surprise as we are conditioning on that.
 

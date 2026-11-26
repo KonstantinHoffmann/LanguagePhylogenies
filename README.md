@@ -241,7 +241,7 @@ BEAST 2 now creates multiple files. The Log-file contains all the information ab
 
 ### Burn-In and ESS
 
-Tracer provides us some summary statistics of the posterior sample. After loading the log-file we see in the top left corner the filename, the amount of states and the burn-in (which is 10% by default). Below there are all the parameters listed together with their mean values and their effective sample size (ESS). This value should -- as a rule of thumb -- be above 200 for each parameter. 
+Tracer provides us some summary statistics of the posterior sample. After loading the log-file we see in the top left corner the filename, the amount of states and the burn-in (which is 10% by default). Below there are all the parameters listed together with their mean values and their effective sample size (ESS). This value should -- as a rule of thumb -- be above 200 for each parameter.  
 
 The MCMC-algorithm needs some time for the Markov chain to converge to its stationary state. Click on a parameter and then on `Trace` in the right window. If you can see big jumps, then this is a strong hint that the chain has not converged yet. The first fraction of the run, where the algorithm has not converged yet is called **burn-in** and is discarded. We can adjust the burn-in by clicking on it and typing a new value that covers all observable big jumps.
 
@@ -252,21 +252,19 @@ The MCMC-algorithm needs some time for the Markov chain to converge to its stati
 
 > Open Tracer, click on the `+` in the top left corner to import trace files. Select `cpacific.log `and `cpacific_prior.log` and press `Ok`.
 
-Note that in this example file, most of the ESSes are below 200 as we the chain length of the MCMC to a rather low value.
+Note that in this example file, most of the ESSes are below 200 as we the chain length of the MCMC to a rather low value. The full analysis in `precooked_runs` is nice and stable.
 
 ### Checking out interesting parameters
 
 What are the inferred parameters? How quickly do these languages evolve? There are a lot of values to check, we will go through it. Make sure to compare all results to the ones from the sample-from-prior-run to ensure their validity. Note that the MCMC-algorithm is a stochastic process, so your results might vary a bit from the ones presented here.
 
-**Posterior, prior** and **likelihood**: The posterior -- the product of prior and likelihood -- is the value that the MCMC-algorithm optimizes. Further we have the treelikelihoods for every word. Ideally all of those have an ESS of above 200.
+**Posterior, prior** and **likelihood**: The posterior -- the product of prior and likelihood -- is the value that the MCMC-algorithm optimizes.
 
-More interesting is the **tree height**. Archaeologists suggest that the first settlement of Fiji happend ca. 3200 years ago. Our estimate has a mean of roughly 3900 years, which seems to be quite far off, but 3200 is still in its 95% HPD interval.
-
-The **mutation rates** of the different word categories are quite striking. We can clearly see slow (bird), medium (and) and fast (belly) mutation rates. You can select all three at once to see them together.
+More interesting is the **tree height** (here `Tree.t:tree.height`).  Archaeologists suggest that the first settlement of Fiji happened ca. 3200 years ago. Our estimate has a mean of roughly 3500 years, which seems to be quite far off, but 3200 is still in its 95% HPD interval (which you can see on the `Estimates` tab as between 2769 -- 5561 years).
 
 Below are the parameters of the Binary Covarion model followed by the ones of the Birth-death model. We would like to compare the prior with the posterior. In the top left corner you can select both trace files at once (by holding down `ctrl` while clicking). Select e.g. the birth rate parameter and click on `Marginal Density` to see how the data influenced the prior assumptions. In our case the posterior **birth** and **death rates** are overlapping with their prior beliefs, but narrowing down the confidence interval towards much lower rates. The **sampling proportion** matches its prior, which is no surprise as we are conditioning on that.
 
-Last but not least the **MRCA times** of East Polynesia and New Zealand: New Zealand matches its prior -- again the prior was chosen to be very strict and we are sure about this knowledge -- while the time of the East Polynesian clade is a bit older than the prior. Remember that there were two different reports about its clade age. This analysis well supports the "long" chronology.
+Last but not least the **MRCA times** -- i.e. Most Recent Common Ancestor --  of East Polynesia and New Zealand: New Zealand matches its prior -- again the prior was chosen to be very strict and we are sure about this knowledge -- while the time of the East Polynesian clade is a bit older than the prior. Remember that there were two different reports about its clade age. The analysis has pushed the age of the East Polynesian clade older than the prior to around a median of 1080 years which supports the "long" chronology.
 
 <figure>
 	<img style="width:100%;" src="figures/tracefile1.png" alt="">
@@ -283,15 +281,17 @@ Now we will have a look at the generated tree files from the analysis.
 
 > Open the page https://icytree.org in a web browser. Go to `File > Load from file...` and select your tree file (`cpacific.trees`). Press `a` to see a time axis.
 
-This shows us all the trees from our posterior sample. The arrows in the bottom left corner are used to navigate through all the trees.
+This shows us all the trees from our posterior sample. The arrows in the bottom left corner are used to navigate through all the trees. Remember that the nature of a MCMC search means that the first trees are terrible, so skip through these: push `.` or `>`  to skip through the file by 1 tree and 1000 trees respectively. See how the trees get more defined structure as the analysis goes on. 
 
 ### MCC tree with `treeannotator`
 
 Treeannotator creates a summary tree out of all the trees from the posterior sample excluding the burn in.
 
-> Open Treeannotator. Set the `Burnin percentage` to **50** percent and specify your input (`cpacific.trees`) and output file (e.g. `cpacific_annotated.trees`). Click on `Run` to start the process.
+> Open Treeannotator. Set the `Burnin percentage` to **10** percent and specify your input (`cpacific.trees`) and output file (e.g. `cpacific_annotated.trees`). Click on `Run` to start the process.
 
-Then again, IcyTree can be used to show the MCC tree. 
+You can also just use the MCC tree I made in precooked_runs called `cpacific_annotated.trees`.
+
+Again IcyTree can be used to show the MCC tree. 
 
 > Open again icytree.org and load your annotated tree file. Press `a` to display the time axis. Go to `Style > Internal node text > posterior`  and then to `Style > Node height error bars > height_95%_HPD`. You should now be able to see the posterior probabilities of all the nodes together with their height HPD intervals.
 
@@ -304,7 +304,7 @@ Interestingly most of the diversification events happened in the past 1500 years
 
 ### Compare tree topologies with `DensiTree`
 
-The first branching event after the root has a fairly low support in our MCC-tree. This means that the topology is just the most likely one, but not neccessarily the correct one as other might also have a decent support. To visualize these other topologies `DensiTree` is a nice tool. A detailed description on how to use `DensiTree` is in the tutorial [Introduction to BEAST2](https://taming-the-beast.org/tutorials/Introduction-to-BEAST2/). 
+The first branching event after the root has a fairly low support in our MCC-tree (p=0.58 in my tree). This means that the topology is just the most likely one, but not neccessarily the correct one as other might also have a decent support. To visualize these other topologies `DensiTree` is a nice tool. A detailed description on how to use `DensiTree` is in the tutorial [Introduction to BEAST2](https://taming-the-beast.org/tutorials/Introduction-to-BEAST2/). 
 
 > Open DensiTree, click on `File > Load` and select your log file (`cpacific.trees`). Click on the `Burn in`-tab on the right panel and set the burn in (in our case) to $50$.
 

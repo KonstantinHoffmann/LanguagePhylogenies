@@ -94,21 +94,9 @@ Finally select `Babel` from the list and press `Install/Upgrade`. Also install `
 
 ## The data set
 
-Before we start we need to make sure that our data is suitable for an analysis with `Babel`. We assume that the alignments consist of **0, 1** and **?** representing the presence, absence or uncertainty of a feature (i.e. cognate or grammatical feature). Babel also assumes that your data has **ascertainment correction** columns. Researchers tend not to collect data that does not vary. This is a form of sampling bias that is often called ascertainment bias {% cite Chang2015 --file LanguagePhylogenies/master_refs.bib  %}. In order to account for that **every first column of every partition of the alignment has to be an ascertainment column**. There all languages have the entry **0** except the ones, where the data is missing, they have a **?**.
+Before we start we need to make sure that our data is suitable for an analysis with `Babel`. We assume that the alignments consist of **0, 1** and **?** representing the presence, absence or uncertainty of a feature (i.e. cognate or grammatical feature). Babel also assumes that your data has an **ascertainment correction** column. Researchers tend not to collect data that does not vary. This is a form of sampling bias that is often called ascertainment bias {% cite Chang2015 --file LanguagePhylogenies/master_refs.bib  %}. In order to account for that **the first column of the alignment has to be an ascertainment column**. There all languages have the entry **0** except the ones, where the data is missing, they have a **?**.
 
-The data used in this tutorial is an alignment matrix, where each entry represents the presence or absence of a certain cognate in this specific language. If you open the file `cpacific.nex` in a text editor, you can see that there is the alignment matrix and below a text block indicating, which columns belong the which meaning class. Every first entry of each meaning class is an ascertainment column.
-
-<figure>
-	<a id="fig:asc1"></a>
-	<img style="width:60%;" src="figures/ascertainment1.png" alt="">
-	<figcaption>Every first character of a meaning class is an ascertainment character</figcaption>
-</figure>
-
-<figure>
-	<a id="fig:asc2"></a>
-	<img style="width:100%;" src="figures/ascertainment2.png" alt="">
-	<figcaption>Columns 1, 6, 12, 16, 19 and 23 are ascertainment columns consisting only of 0 and ?</figcaption>
-</figure>
+The data used in this tutorial is an alignment matrix, where each entry represents the presence or absence of a certain cognate in this specific language. If you open the file `cpacific.nex` in a text editor, you can see the alignment matrix. The first column, `_0ascertainment`, is the ascertainment column and consists only of 0 and ?.
 
 
 
@@ -128,35 +116,6 @@ Next we will import our data set.
 
 > Go to  `File > Add Alignment`, select the file `cpacific.nex`  and click on `Ok`.
 
-You should be able to see your alignment on the screen. There is one partition for every meaning class and they are presorted by the number of sites (i.e. the number of cognate sets in that word INCLUDING the ascertainment site for that word). You can see that some words have few cognate sets while others have many.
-Meaning classes differ in how fast their words are replaced. A concept like "hand" keeps the same cognate word in nearly all of these languages, so it has one cognate set, while a concept like "dirty" is replaced often and has many. The number of cognate sets is therefore linked to the rate of change. See the figure here showing the number of cognates in each word partition:
-
-<figure>
-	<a id="fig:cogsize"></a>
-   <img style="width:60%;" src="figures/cognate_set_sizes.png" alt="">
-   <figcaption>Partition sizes in cpacific.nex, coloured by the three site-model groups (78, 99 and 25 partitions)</figcaption>
-</figure>
-
-
-Many studies give all the partitions the same _site_ model which would mean slow and fast words evolve at the same rate. This is not necessarily a bad thing because we have other accommodations in the model to incorporate rate variation (covarion, gamma, relaxed clock) and whether it matters will depend on how much variation there is overall.
-
-Another alternative is to give every one of the 202 words its own site model but this would give only a few sites to estimate each rate. This means that getting a stable rate estimate for small partitions can be hard and only really works if you have a lot of data or strong rate priors. But there are studies out there that do this. 
-
-Here we will use an intermediate approach that bins cognate sets by size (seen first in Heggarty et al. 2023). 
-To achieve this we want to have different site models depending on the size of each meaning class. I have somewhat arbitrarily chosen three sets here based on looking at the cognate set size graph above:  One for really slowly evolving words (size 1-5), another one for moderately changing words (size 6-10) and a third one for rapidly changing words (size 11-15). This means that there are three linked groups where each group pools enough data to estimate its rate well. 
-
-
-(If you were doing this properly you should compare the results under one partition and multiple partitions to see which fits better). 
-
-> After loading the data select the first partition `orgdata.bird` , hold **Shift**, scroll down and click on `orgdata.year` and press `Link Site Models`. Do the same from `orgdata.and` to `orgdata.wormearthworm` and from `orgdata.belly` to `orgdata.tothrow`.
-
-<figure>
-	<a id="fig:alignment"></a>
-	<img style="width:100%;" src="figures/LoadedAlignment.png" alt="">
-	<figcaption>The alignment loaded and partitions grouped in bins of size 5</figcaption>
-</figure>
-
-
 
 ### Choosing a site model
 
@@ -164,9 +123,9 @@ In the `Site Model` tab we usually choose the substitution model for nucleotide 
 
 In the Binary Covarion model each character can have one of four states that are divided into **visible states** and **hidden states**. The visible ones are **0** and **1** and the hidden ones are **fast** and **slow**. Characters change their binary state at a rate **1** in the fast state and at rate **alpha** in the slow state. Furthermore they are allowed to change from one of the hidden categories to another at a **switch rate s**.
 
-For now we stick with the default values of **alpha=0.5, s=0.5** and all the frequencies set to **0.5**. Also we want to set the amount of gamma categories to zero in order to have no rate variation across sites. There are three different implementations of the Binary Covarion model, `BEAST`, `REVERSIBLE` and `TUFFLEYSTEEL`. Unless you know, what you are doing, stick with the default one `BEAST`. 
+For now we stick with the default values of **alpha=0.5, Switch rate=0.5** and all the frequencies set to **0.5**. If we wanted to add gamma distributed rate heterogeneity we could set `Gamma Category Count` here to a number like 4. 
 
-Note that one should make multiple analyses with differing substitution models and check, which one performs best.
+Note that one should make multiple analyses with differing substitution models and check which one performs best.
 
 <figure>
 	<img style="width:100%;" src="figures/SiteModel.png" alt="">
@@ -178,7 +137,6 @@ Note that one should make multiple analyses with differing substitution models a
 ### Clock Model
 
 For simplicity we go for a strict clock in this tutorial, so leave everything in this tab as it is. You can relax the clock later if you want and it is strongly recommended to try varying clock models and see which one fits best. To choose a relaxed clock model select the "Optimised Relaxed Clock" from the dropdown. 
-
 
 
 ### The priors
@@ -200,13 +158,15 @@ These three parameters are correlated to each other, so we need to have a strong
 	<figcaption>The Beta distribution is great to specify the sampling proportion</figcaption>
 </figure>
 
-Now set the priors on the birth and death rates. In the skyline model rates are constant over time, but may change to different values at specific times. This is governed by the `dimension` of the birth- or death rate parameter. A dimension of 3 means that there are three different values and thus two rate change events (that are by default evenly distributed along the tree). If we would like to have only one overall rate, we need to set the dimension of the birth rate and death rate to 1. For now we stick with constant rates, but later we might want to check if a proper Skyline model with multiple rates performs better.
+Look at the graph that BEAUTi gives you, this tells you exactly what assumptions you are building into the analysis with this prior. For example, we are assuming that we've sampled a mean of 0.444 of the total
+linguistic diversity in this group, and this value will have a 95% probability of being between
+0.304 and 0.567.
+ 
 
-We don't know how quickly languages die out or emerge, but we know for sure that it doesn't happen every day. A death rate of 0.01 means for example that a language is about 100 years around before it goes extinct. Some language last much longer, some others shorter. A good prior candidate for that would be the exponential distribution. It favors low values close to zero, but also allows higher values if it is necessary. We also can set the initial values of these parameters much lower in order to decrease the burn-in time. 
+Now set the priors on the birth and death rates. We don't know how quickly languages die out or emerge, but we know for sure that it doesn't happen every day. We will assume that it takes about 100 years to make a new language or for one to stop being spoken but because this can vary massively we will use an exponential distribution. The exponential distribution favors low values close to zero, but also allows higher values if it is necessary. To assume a median lifespan of about 100 years we will set a rate of 0.01:
 
-BEAUTi allows you to visualise what this looks like. 
 
-> Then click on the button next to the birth rate prior, which says `initial = [2.0][0.0,Infinity]`, set `Dimension` to **1**, if it is not already by default and the `Value` to **0.01**. Do the same for the death rate, but set this initial value to something slightly lower, e.g. **0.009**.
+> Click on the button next to the birth rate prior, which says `initial = [2.0][0.0,Infinity]`, set `Infinity` to **1** and the `Value` to **0.01**. Do the same for the death rate, but set this initial value to something slightly lower, e.g. **0.009**.
 >
 > Then click on the black triangle left of `birthRateBDS.t:tree` and select `Exponential` from the drop down menu. Set the `Mean` value to **0.01**. Repeat this step for `deathRateBDS.t:tree`.
 
@@ -223,9 +183,16 @@ Next we want to add some priors for time calibration. According to {% cite Wilms
 2000 - 1282 = 718 years ago
 ```
 
-So a prior incorporating this information could be a tight log-normal distribution with mean 744 (in real space) and a variance 0.02. Why? because this covers that age range -- look at the BEAUTi figure when you've done the following and see how it spans 715-774 years.
+So a prior incorporating this information could be a tight log-normal distribution with mean 17 (in real space) and a variance 0.9, and an offset of 713. Why? because this covers that age range -- look at the BEAUTi figure when you've done the following and see how it spans 715-779 years. And note
+that the lognormal puts a higher probability mass on the more recent side of that
+range: this is saying that this group would definitely have diverged by 715 years
+ago (with a mean of 730 years) but could have diverged earlier than that. 
 
-> In the priors tab select `+ Add Prior`. You should see a dialog popping up, choose `MRCA prior` and click `Ok`. In the box next to `Taxon Set Label` type **NewZealand**. Search **Maori** and **SouthIslandMaori** in the list, select them and press `>>` to include them in our phylogenetic constraint. At the end press `OK`. Now you should see the `NewZealand.prior` appearing on the priors tab. Check the box `monophyletic` and select the distribution `Log Normal`. Click on the black triangle on the left to specify the parameters of the distribution. Set `M` to **744** and `S` to **0.02** and make sure to have `Mean In Real Space` selected.
+> In the priors tab select `+ Add Prior`. You should see a dialog popping up, choose `MRCA prior` and click `Ok`. In the box next to `Taxon Set Label` type **NewZealand**. Search **Maori** and **SouthIslandMaori** in the list, select them and press `>>` to include them in our phylogenetic constraint. At the end press `OK`. Now you should see the `NewZealand.prior` appearing on the priors tab.
+> 
+Now set up the age calibration on that node.
+
+>   Check the box `monophyletic` and select the distribution `Log Normal`. Click on the black triangle on the left to specify the parameters of the distribution. Set `M` to **714**, `S` to **0.09**, and `offset` to 713. Make sure to have `Mean In Real Space` selected.
 
 Another good calibration is East Polynesian: It is a well-attested linguistic group and we have good archaeological evidence for when the initial settlement of East Polynesia began. However the ages are a bit controversial between “short” and “long” chronologies e.g.:
 
@@ -246,9 +213,9 @@ The average of these estimates is about 1000 years ago, and they are spread on b
 	<figcaption>The calibration priors</figcaption>
 </figure>
 
-Finally we want to make sure that all priors are proper. There are uniform priors without upper bound for the clock rate and the slow mutation rate from the Binary Covarion model. One should choose a value that is large enough that the traces don't get close to it. 100 should be generous enough for both parameters. However the analysis will run if you skip this step and might yield useful results, but if we want to compare different analyses and estimate their marginal likelihood it is essential to only have proper priors.
+Finally we want to make sure that all priors are proper. There are uniform priors without upper bound for the clock rate and the slow mutation rate from the Binary Covarion model. One should choose a value that is large enough that the traces don't get close to it. 1 should be generous enough for both parameters. However the analysis will run if you skip this step and might yield useful results, but if we want to compare different analyses and estimate their marginal likelihood it is essential to only have proper priors.
 
-> Expand the prior of `clockRate.c:clock` and set `Upper` to **100** . Do the same for `bcov_alpha.s:bird`.
+> Expand the prior of `clockRate.c:clock` and set `Upper` to **1** . Do the same for `bcov_alpha.s:cpacific`.
 
 ### The MCMC tab
 

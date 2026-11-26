@@ -183,7 +183,7 @@ Next we want to add some priors for time calibration. According to {% cite Wilms
 2000 - 1282 = 718 years ago
 ```
 
-So a prior incorporating this information could be a tight log-normal distribution with mean 17 (in real space) and a variance 0.9, and an offset of 713. Why? because this covers that age range -- look at the BEAUTi figure when you've done the following and see how it spans 715-779 years. And note
+So a prior incorporating this information could be a tight log-normal distribution with mean 17 (in real space), a standard deviation (`S`) of 0.9 on the log scale, and an offset of 713. Why? because this covers that age range -- look at the BEAUTi figure when you've done the following and see how it spans 715-779 years. And note
 that the lognormal puts a higher probability mass on the more recent side of that
 range: this is saying that this group would definitely have diverged by 715 years
 ago (with a mean of 730 years) but could have diverged earlier than that. 
@@ -192,7 +192,7 @@ ago (with a mean of 730 years) but could have diverged earlier than that.
 > 
 Now set up the age calibration on that node.
 
->   Check the box `monophyletic` and select the distribution `Log Normal`. Click on the black triangle on the left to specify the parameters of the distribution. Set `M` to **714**, `S` to **0.09**, and `offset` to 713. Make sure to have `Mean In Real Space` selected.
+>   Check the box `monophyletic` and select the distribution `Log Normal`. Click on the black triangle on the left to specify the parameters of the distribution. Set `M` to **17**, `S` to **0.9**, and `Offset` to **713**. Make sure to have `Mean In Real Space` selected.
 
 Another good calibration is East Polynesian: It is a well-attested linguistic group and we have good archaeological evidence for when the initial settlement of East Polynesia began. However the ages are a bit controversial between “short” and “long” chronologies e.g.:
 
@@ -202,7 +202,7 @@ Another good calibration is East Polynesian: It is a well-attested linguistic gr
 ```
 
 The average of these estimates is about 1000 years ago, and they are spread on both sides by about 150-
-200 years. This makes a great candidate for a Normal distribution with mean 1000 and variance 100.
+200 years. This makes a great candidate for a Normal distribution with mean 1000 and standard deviation 100.
 
 > Click again on `+ Add Prior` , choose `MRCA prior` and press `Ok`. This time, type **EastPolynesian** as `Taxon Set Label` and add the following languages to the list (by clicking on them and on `>>`):
 >

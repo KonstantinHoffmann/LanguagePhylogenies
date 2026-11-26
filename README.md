@@ -163,7 +163,7 @@ linguistic diversity in this group, and this value will have a 95% probability o
 0.304 and 0.567.
  
 
-Now set the priors on the birth and death rates. We don't know how quickly languages die out or emerge, but we know for sure that it doesn't happen every day. We will assume that it takes about 100 years to make a new language or for one to stop being spoken but because this can vary massively we will use an exponential distribution. The exponential distribution favors low values close to zero, but also allows higher values if it is necessary. To assume a median lifespan of about 100 years we will set a rate of 0.01:
+Now set the priors on the birth and death rates. We don't know how quickly languages die out or emerge, but we know for sure that it doesn't happen every day. We will assume that it takes about 100 years to make a new language or for one to stop being spoken but because this can vary massively we will use an exponential distribution. The exponential distribution favors low values close to zero, but also allows higher values if it is necessary. To assume that an event happens about once every 100 years we set the mean of the prior on the rate to 0.01 per year:
 
 
 > Click on the button next to the birth rate prior, which says `initial = [2.0][0.0,Infinity]`, set `Infinity` to **1** and the `Value` to **0.01**. Do the same for the death rate, but set this initial value to something slightly lower, e.g. **0.009**.
@@ -215,25 +215,25 @@ Finally we want to make sure that all priors are proper. There are uniform prior
 
 ### The MCMC tab
 
-Here we can specify the length of the run as well as the filenames of the output tree file (where the posterior sample of trees is stored) and the log file (where the posterior sample of parameters is stored). For the purpose of this tutorial, we choose a short chain length of 1 million. Usually the chain length should be large enough to yield a high ESS for every parameter (see next section). Finally we want to save our settings and generate a BEAST2-xml file. 
+Here we can specify the length of the run as well as the filenames of the output tree file (where the posterior sample of trees is stored) and the log file (where the posterior sample of parameters is stored). For the purpose of this tutorial, we choose a short chain length of 1 million. Usually the chain length should be large enough to yield a high ESS for every parameter (see next section). Finally we want to save our settings and generate a BEAST2 XML file. 
 
 > Click on the `MCMC`-tab. Set the chain length to **1000000** and set the filenames of the log files (tracelog and treelog, screenlog can be left empty) by expanding their respective menu. Select `File > Save As` and enter a filename (e.g. **cpacific.xml**) and click `Ok`. 
 
 
-It is highly recommended to generate another xml-file with the check box `Sample From Prior` ticked (save it under a different filename). It is used to verify if the data has enough signal to estimate the parameters or if the posterior results are mainly dominated by the prior choice.
+It is highly recommended to generate another XML file with the check box `Sample From Prior` ticked (save it under a different filename). It is used to verify if the data has enough signal to estimate the parameters or if the posterior results are mainly dominated by the prior choice.
 
 > Tick the check box next to `Sample from Prior`, change the file names of the trace log files and tree log files (e.g. **cpacific_prior.log** and **cpacific_prior.trees**) and save again with a different filename (e.g. **cpacific_prior.xml**).
 
 
 ## Running the analysis
 
-Now we are ready to run the file. Open BEAST 2 and select your generated xml-file as input. The computation should take a while (ca. 30 min. on a modern computer), you can watch it progressing or use the finished output files in the `precooked_runs` folder of this tutorial (`cpacific.log`, `cpacific.trees`, `cpacific_prior.log`, `cpacific_prior.trees`) and carry on with them. These were run for 10 million generations.
+Now we are ready to run the file. Open BEAST2 and select your generated XML file as input. The computation should take a while (ca. 30 min. on a modern computer), you can watch it progressing or use the finished output files in the `precooked_runs` folder of this tutorial (`cpacific.log`, `cpacific.trees`, `cpacific_prior.log`, `cpacific_prior.trees`) and carry on with them. These were run for 10 million generations.
 
->Open BEAST 2, click `Choose File...`, select `cpacific.xml` and click `Open`, then click `Run`. Repeat this for the sample-from-prior analysis.
+>Open BEAST2, click `Choose File...`, select `cpacific.xml` and click `Open`, then click `Run`. Repeat this for the sample-from-prior analysis.
 
 ## Processing the results
 
-BEAST 2 now creates multiple files. The log file contains all the information about the inferred parameters, in the tree-file we find a posterior sample of the tree space and finally there is a file `cpacific.xml.state` where the current state of the Markov chain is stored, if we want to continue the analysis at some point starting from this state.
+BEAST2 now creates multiple files. The log file contains all the information about the inferred parameters, in the tree-file we find a posterior sample of the tree space and finally there is a file `cpacific.xml.state` where the current state of the Markov chain is stored, if we want to continue the analysis at some point starting from this state.
 
 ### Burn-In and ESS
 
@@ -327,7 +327,7 @@ Nested sampling is a great way to compare different models. It gives a marginal 
 
 # Useful Links
 
-- BEAST 2 website and documentation: https://www.beast2.org/
+- BEAST2 website and documentation: https://www.beast2.org/
 - Babel package for linguistic analyses in BEAST2: https://github.com/rbouckaert/Babel
 - BDSKY package for BEAST2: https://github.com/BEAST2-Dev/bdsky
 - Nested Sampling: https://github.com/BEAST2-Dev/nested-sampling [tutorial](https://taming-the-beast.org/tutorials/NS-tutorial/)

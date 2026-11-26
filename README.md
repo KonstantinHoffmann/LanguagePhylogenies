@@ -3,7 +3,7 @@ author: Simon J. Greenhill, Konstantin Hoffmann
 title: Language Phylogenies
 subtitle: Using Babel to analyse linguistic data
 tracerversion: 1.7.1
-beastversion_tutorial: 2.5.2
+beastversion_tutorial: '2.7'
 workflow: Basic workflow
 status: current
 keywords:

@@ -256,11 +256,11 @@ What are the inferred parameters? How quickly do these languages evolve? There a
 
 **Posterior, prior** and **likelihood**: The posterior is proportional to the product of prior and likelihood, and is the distribution the MCMC-algorithm samples from.
 
-More interesting is the **tree height** (here `Tree.t:tree.height`).  Archaeologists suggest that the first settlement of Fiji happened ca. 3200 years ago. Our estimate has a mean of roughly 3500 years, which seems to be quite far off, but 3200 is still in its 95% HPD interval (which you can see on the `Estimates` tab as between 2769 -- 4328 years).
+More interesting is the **tree height** (here `Tree.t:tree.height`).  Archaeologists suggest that the first settlement of Fiji happened ca. 3200 years ago. Our estimate has a mean of roughly 3500 years, a little older than 3200, which is well inside its 95% HPD interval (which you can see on the `Estimates` tab as between 2769 -- 4328 years).
 
 Below are the parameters of the Binary Covarion model followed by the ones of the Birth-death model. We would like to compare the prior with the posterior. In the top left corner you can select both trace files at once (by holding down `Cmd` (macOS) or `Ctrl` (Windows/Linux) while clicking). Select e.g. the birth rate parameter and click on `Marginal Density` to see how the data influenced the prior assumptions. In our case the posterior **birth** and **death rates** are overlapping with their prior beliefs, but narrowing down the 95% HPD interval towards much lower rates. The **sampling proportion** matches its prior, which is no surprise as we are conditioning on that.
 
-Last but not least the **MRCA times** -- i.e. Most Recent Common Ancestor --  of East Polynesia and New Zealand: New Zealand matches its prior -- again the prior was chosen to be very strict and we are sure about this knowledge -- while the time of the East Polynesian clade is a bit older than the prior. Remember that there were two different reports about its clade age. The analysis has pushed the age of the East Polynesian clade older than the prior to around a median of 1080 years which supports the "long" chronology.
+Last but not least the **MRCA times** -- i.e. Most Recent Common Ancestor --  of East Polynesia and New Zealand: New Zealand matches its prior -- again the prior was chosen to be very strict and we are sure about this knowledge -- while the time of the East Polynesian clade is a bit older than the prior. Remember that there were two different reports about its clade age. The analysis has pushed the age of the East Polynesian clade older than the prior to a median of about 1080 years. This favours the "long" chronology, though the 95% HPD (945 -- 1222) still overlaps the "short" one.
 
 <figure>
 	<img style="width:100%;" src="figures/tracefile1.png" alt="">
@@ -296,7 +296,7 @@ Again IcyTree can be used to show the MCC tree.
 	<figcaption>The MCC summary tree in IcyTree</figcaption>
 </figure>
 
-Interestingly most of the diversification events happened in the past 1500 years and two approximately 3500 years ago according to this analysis. This might be a clue that a model assuming different birth rates might yield better results.
+Interestingly most of the diversification events happened in the past 1500 years and two about 3200 and 3500 years ago according to this analysis. This might be a clue that a model with birth and death rates that change over time, such as the Birth Death Skyline with several intervals, fits better.
 
 ### Compare tree topologies with `DensiTree`
 
@@ -309,7 +309,7 @@ The first branching event after the root has a fairly low support in our MCC-tre
 	<figcaption>Densitree shows all different topologies at once</figcaption>
 </figure>
 
-In many trees Fijian clusters with Rotuman, which leads to the low support of Fijian being outside the other languages in the summary tree. However it does not have a big impact on the timing of the diversification events. 
+In about 29% of the trees Fijian clusters with Rotuman, which leads to the low support of Fijian being outside the other languages in the summary tree. However it does not have a big impact on the timing of the diversification events. 
 
 # Further steps
 

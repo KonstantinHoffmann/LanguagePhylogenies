@@ -229,7 +229,7 @@ It is highly recommended to generate another xml-file with the check box `Sample
 
 Now we are ready to run the file. Open BEAST 2 and select your generated xml-file as input. The computation should take a while (ca. 30 min. on a modern computer), you can watch it progressing or download the finished output-files and carry on the tutorial with them.
 
->Open BEAST 2, select `cpacific.xml` as input-file and click `Open`. Repeat this for the sample-from-prior analysis.
+>Open BEAST 2, click `Choose File...`, select `cpacific.xml` and click `Open`, then click `Run`. Repeat this for the sample-from-prior analysis.
 
 ## Processing the results
 
